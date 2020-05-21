@@ -45,3 +45,5 @@ class Post extends VuexModule implements IPostState {
         // this.SET_COMMENTS()
     }
 }
+
+export const PostModule = getModule(Post)
