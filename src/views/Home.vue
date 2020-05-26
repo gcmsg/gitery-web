@@ -25,8 +25,10 @@ export default class extends Vue {
   }
 
   private async getPosts() {
-    const data = await getRecentPosts();
-    console.log(data);
+    const { data } = await getRecentPosts();
+    console.log(data.data);
+    console.log(data.ok);
+    console.log(data.timestamp);
     this.posts = [];
   }
 }
