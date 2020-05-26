@@ -5,14 +5,29 @@
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 import HelloWorld from '@/components/HelloWorld.vue';
+import { Post } from '@/prototypes/post';
+import { getRecentPosts } from '@/api/post';
 
-export default {
+@Component({
   name: 'Home',
   components: {
     HelloWorld,
   },
-};
+})
+export default class extends Vue {
+  private posts: Post[] = [];
+
+  created() {
+    this.getPosts();
+  }
+
+  private async getPosts() {
+    const data = await getRecentPosts();
+    console.log(data);
+    this.posts = [];
+  }
+}
 </script>

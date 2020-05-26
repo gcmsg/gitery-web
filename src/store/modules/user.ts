@@ -1,14 +1,16 @@
-import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import router from '@/router'
-import store from '@/store'
+/* eslint-disable import/no-cycle */
+import {
+  VuexModule, Module, getModule,
+} from 'vuex-module-decorators';
+import store from '@/store';
 
-export interface IUserState {
-    email: string
+export interface UserState {
+  email: string;
 }
 
 @Module({ dynamic: true, store, name: 'user' })
-class User extends VuexModule implements IUserState {
-    public email: string = ''
+class User extends VuexModule implements UserState {
+  public email = ''
 }
 
-export const UserModule = getModule(User)
+export const UserModule = getModule(User);
