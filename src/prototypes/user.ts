@@ -1,4 +1,7 @@
-export interface IUser {
-    email: string
-    nickname: string
+export interface User {
+  id: number;
+  email: string;
+  nickname: string;
+  createdAt: number;
+  updatedAt: number;
 }

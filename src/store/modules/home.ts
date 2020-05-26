@@ -1,19 +1,23 @@
-import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import router from '@/router'
-import store from '@/store'
-import { IPostState } from './post'
+/* eslint-disable import/no-cycle */
+import {
+  VuexModule, Module, getModule,
+} from 'vuex-module-decorators';
+import store from '@/store';
+import { PostState } from './post';
 
-export interface IHomeState {
-    tags: string[]
-    posts: IPostState[]
-    isLoading: boolean
+export interface HomeState {
+  tags: string[];
+  posts: PostState[];
+  isLoading: boolean;
 }
 
 @Module({ dynamic: true, store, name: 'home' })
-class Home extends VuexModule implements IHomeState {
-    public tags: string[] = []
-    public posts: IPostState[] = []
-    public isLoading: boolean = true
+class Home extends VuexModule implements HomeState {
+  public tags: string[] = []
+
+  public posts: PostState[] = []
+
+  public isLoading = true
 }
 
-export const HomeModule = getModule(Home)
+export const HomeModule = getModule(Home);
