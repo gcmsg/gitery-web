@@ -1,20 +1,22 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <NavigationBar />
+    <div v-for="post in posts" v-bind:key="post.id">
+      <h6 v-text="post.title" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue';
+import NavigationBar from '@/components/NavigationBar.vue';
 import { Post } from '@/prototypes/post';
 import { getRecentPosts } from '@/api/post';
 
 @Component({
   name: 'Home',
   components: {
-    HelloWorld,
+    NavigationBar,
   },
 })
 export default class extends Vue {
@@ -26,10 +28,11 @@ export default class extends Vue {
 
   private async getPosts() {
     const { data } = await getRecentPosts();
-    console.log(data.data);
-    console.log(data.ok);
-    console.log(data.timestamp);
-    this.posts = [];
+    if (data.ok) {
+      this.posts = data.data;
+    } else {
+      // alert error
+    }
   }
 }
 </script>

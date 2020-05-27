@@ -2,7 +2,7 @@
 <!-- This is an alternative way to define the Hello component using decorators -->
 <template>
   <div class="about">
-    <div class="greeting">Hello {{ name }}{{ exclamationMarks }}</div>
+    <div class="greeting">Hello {{ name }} {{ exclamationMarks }}</div>
     <button @click="decrement">-</button>
     <button @click="increment">+</button>
   </div>
@@ -17,20 +17,20 @@ export default class About extends Vue {
 
   @Prop() initialEnthusiasm!: number;
 
-  enthusiasm = this.initialEnthusiasm;
+  private enthusiasm: number = this.initialEnthusiasm;
 
-  increment() {
+  private increment() {
     this.enthusiasm += 1;
   }
 
-  decrement() {
+  private decrement() {
     if (this.enthusiasm > 1) {
       this.enthusiasm -= 1;
     }
   }
 
-  get exclamationMarks(): string {
-    return Array(this.enthusiasm + 1).join('!');
+  private get exclamationMarks(): string {
+    return `${this.enthusiasm}!`;
   }
 }
 </script>
