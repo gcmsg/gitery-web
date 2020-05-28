@@ -5,20 +5,21 @@
     mode="horizontal"
     @select="handleSelect"
   >
-    <el-menu-item index="1">处理中心</el-menu-item>
-    <el-menu-item index="2">我的工作台</el-menu-item>
-    <el-menu-item index="3">消息中心</el-menu-item>
+    <el-menu-item v-for="route in routes" :key="route.key" :index="route.key">
+      <router-link :to="route.path">{{route.name}}</router-link>
+    </el-menu-item>
   </el-menu>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Route } from '@/prototypes/route';
 
 @Component
 export default class NavigationBar extends Vue {
-  private activeIndex = '1';
+  @Prop() routes!: Route[];
 
-  private activeIndex2 = '1';
+  private activeIndex = this.routes[0].name;
 
   private handleSelect(key: string, keyPath: string) {
     console.log(key, keyPath, this.activeIndex);

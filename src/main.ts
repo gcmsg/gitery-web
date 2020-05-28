@@ -1,14 +1,15 @@
 import Vue from 'vue';
-import { Menu, Submenu, MenuItem } from 'element-ui';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
 import store from './store';
+import plugins from './plugins';
 
 Vue.config.productionTip = false;
-Vue.use(Menu);
-Vue.use(Submenu);
-Vue.use(MenuItem);
+
+plugins.forEach((plugin) => {
+  Vue.use(plugin);
+});
 
 new Vue({
   router,
