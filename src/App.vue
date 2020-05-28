@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <NavigationBar :routes="routes" />
-    <router-view />
+    <el-container>
+      <el-header>
+        <NavigationBar :routes="routes" />
+      </el-header>
+      <el-main>
+        <router-view />
+      </el-main>
+    </el-container>
   </div>
 </template>
 
