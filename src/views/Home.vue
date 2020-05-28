@@ -1,18 +1,34 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div v-for="post in posts" v-bind:key="post.id">
+      <h6 v-text="post.title" />
+    </div>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import { Post } from '@/prototypes/post';
+import { getRecentPosts } from '@/api/post';
 
-export default {
+@Component({
   name: 'Home',
-  components: {
-    HelloWorld,
-  },
-};
+  components: {},
+})
+export default class extends Vue {
+  private posts: Post[] = [];
+
+  created() {
+    this.getPosts();
+  }
+
+  private async getPosts() {
+    const { data } = await getRecentPosts();
+    if (data.ok) {
+      this.posts = data.data;
+    } else {
+      // alert error
+    }
+  }
+}
 </script>
