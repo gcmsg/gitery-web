@@ -35,8 +35,8 @@ export default class About extends Vue {
 }
 </script>
 
-
-<style>
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
 .greeting {
   font-size: 20px;
 }

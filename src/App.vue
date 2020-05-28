@@ -8,7 +8,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import NavigationBar from '@/components/NavigationBar.vue';
-import { Route } from '@/prototypes/route';
+import { RouteConfig } from 'vue-router';
+import { routes } from './router';
 
 @Component({
   name: 'Home',
@@ -17,10 +18,7 @@ import { Route } from '@/prototypes/route';
   },
 })
 export default class extends Vue {
-  private routes: Route[] = [
-    { key: 'home', path: '/', name: 'Home' },
-    { key: 'about', path: '/about', name: 'About' },
-  ];
+  private routes: RouteConfig[] = routes;
 }
 </script>
 
