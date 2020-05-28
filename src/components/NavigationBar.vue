@@ -1,8 +1,16 @@
 <template>
-  <el-menu :default-active="defaultActiveIndex" mode="horizontal" @select="handleSelect">
-    <el-menu-item v-for="route in routes" :key="route.path" :index="route.path">
-      <router-link :to="route.path">{{route.name}}</router-link>
-    </el-menu-item>
+  <el-menu
+    :default-active="defaultActiveIndex"
+    :router="true"
+    mode="horizontal"
+    @select="handleSelect"
+  >
+    <el-menu-item
+      v-for="route in routes"
+      :route="route"
+      :key="route.path"
+      :index="route.path"
+    >{{route.name}}</el-menu-item>
   </el-menu>
 </template>
 
