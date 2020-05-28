@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    :default-active="defaultActiveIndex"
+    :default-active="$route.path"
     :router="true"
     mode="horizontal"
     @select="handleSelect"
@@ -17,16 +17,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
-import router from '@/router';
 
 @Component
 export default class NavigationBar extends Vue {
   @Prop() routes!: RouteConfig[];
 
-  private defaultActiveIndex = router.currentRoute.path;
-
   private handleSelect(key: string, keyPath: string) {
-    console.log(key, keyPath, this.defaultActiveIndex);
+    console.log(key, keyPath, this.$route.path);
   }
 }
 </script>
