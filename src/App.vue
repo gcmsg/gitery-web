@@ -1,21 +1,21 @@
 <template>
-  <div id="app">
-    <el-container>
-      <el-header>
-        <NavigationBar :routes="routes" />
-      </el-header>
-      <el-main>
-        <router-view />
-      </el-main>
-    </el-container>
-  </div>
+  <el-container>
+    <el-header>
+      <NavigationBar :routes="routes" />
+    </el-header>
+    <el-main>
+      <router-view />
+    </el-main>
+  </el-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import NavigationBar from '@/components/NavigationBar.vue';
 import { RouteConfig } from 'vue-router';
-import { routes } from './router';
+
+import NavigationBar from '@/components/NavigationBar.vue';
+import HomeRoute from './router/home';
+import AboutRoute from './router/about';
 
 @Component({
   name: 'Home',
@@ -24,16 +24,29 @@ import { routes } from './router';
   },
 })
 export default class extends Vue {
-  private routes: RouteConfig[] = routes;
+  private routes: RouteConfig[] = [HomeRoute, AboutRoute];
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+html {
+  font-family: 'Chinese Quote', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  * {
+    box-sizing: border-box;
+    outline: 0;
+  }
+  body {
+    margin: 0;
+  }
 }
 </style>

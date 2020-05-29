@@ -5,7 +5,7 @@ import AboutRoute from './about';
 
 Vue.use(VueRouter);
 
-export const routes: Array<RouteConfig> = [
+const routes: Array<RouteConfig> = [
   HomeRoute,
   AboutRoute,
 ];
