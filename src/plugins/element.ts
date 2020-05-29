@@ -1,7 +1,7 @@
 import {
   Container, Header, Main,
   Menu, Submenu, MenuItem,
-  Input,
+  Input, Checkbox,
   Button,
 } from 'element-ui';
 import locale from 'element-ui/lib/locale';
@@ -12,6 +12,6 @@ locale.use(lang);
 export default [
   Container, Header, Main,
   Menu, Submenu, MenuItem,
-  Input,
+  Input, Checkbox,
   Button,
 ];

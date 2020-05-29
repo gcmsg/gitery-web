@@ -30,7 +30,6 @@ export default class extends Vue {
     password: string,
     rememberMe: boolean,
   ) {
-    console.log(email, password, rememberMe);
     const login: Login = { email, password };
     const { data } = await signIn(login);
     if (data.ok) {
@@ -38,6 +37,10 @@ export default class extends Vue {
       this.token = token;
       this.user = user;
       this.rememberMe = rememberMe;
+      localStorage.setItem('token', token);
+      if (rememberMe) {
+        localStorage.setItem('email', email);
+      }
     } else {
       // alert error
     }
