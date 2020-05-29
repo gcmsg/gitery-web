@@ -1,8 +1,11 @@
-export interface Auth {
+import { User } from './user';
+
+export interface Login {
   email: string;
   password: string;
 }
 
-export interface Token {
+export interface Auth {
   token: string;
+  user: User;
 }

@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <NavigationBar :routes="routes" />
+      <NavigationBar :routes="routes" :onLoginBtnPressed="onLoginBtnPressed" />
     </el-header>
     <el-main>
       <router-view />
@@ -18,13 +18,17 @@ import HomeRoute from './router/home';
 import AboutRoute from './router/about';
 
 @Component({
-  name: 'Home',
+  name: 'app',
   components: {
     NavigationBar,
   },
 })
 export default class extends Vue {
   private routes: RouteConfig[] = [HomeRoute, AboutRoute];
+
+  private onLoginBtnPressed() {
+    this.$router.push('/login');
+  }
 }
 </script>
 

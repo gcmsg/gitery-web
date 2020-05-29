@@ -12,7 +12,7 @@ import { Post } from '@/prototypes/post';
 import { getRecentPosts } from '@/api/post';
 
 @Component({
-  name: 'Home',
+  name: 'home',
   components: {},
 })
 export default class extends Vue {
