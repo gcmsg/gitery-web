@@ -16,13 +16,15 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class LoginPad extends Vue {
-  @Prop() handleLogin!: Function;
+  @Prop({ required: true }) handleLogin!: Function;
 
-  private email = 'name@example.com';
+  @Prop({ default: '' }) defaultEmail!: string;
 
-  private password = 'Fakepassword8';
+  private email = this.defaultEmail;
 
-  private rememberMe = false;
+  private password = '';
+
+  private rememberMe = this.defaultEmail !== '';
 
   private onLoginPressed() {
     this.handleLogin(this.email, this.password, this.rememberMe);

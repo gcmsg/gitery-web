@@ -1,7 +1,7 @@
 <template>
   <div>
     <img alt="Vue logo" src="../assets/logo.png" />
-    <LoginPad :handleLogin="handleLogin" />
+    <LoginPad :handleLogin="handleLogin" :defaultEmail="defaultEmail" />
   </div>
 </template>
 
@@ -18,6 +18,15 @@ import LoginPad from '@/components/LoginPad.vue';
   },
 })
 export default class extends Vue {
+  private defaultEmail = '';
+
+  private created() {
+    const defaultEmail = localStorage.getItem('email');
+    if (defaultEmail != null) {
+      this.defaultEmail = defaultEmail;
+    }
+  }
+
   private async handleLogin(
     email: string,
     password: string,
@@ -28,6 +37,8 @@ export default class extends Vue {
     if (AuthModule.isLoggedIn) {
       if (rememberMe) {
         localStorage.setItem('email', email);
+      } else {
+        localStorage.removeItem('email');
       }
       this.$router.replace('/');
     }
