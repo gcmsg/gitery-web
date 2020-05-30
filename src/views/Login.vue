@@ -8,8 +8,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Login } from '@/prototypes/auth';
-import { User } from '@/prototypes/user';
-import signIn from '@/api/auth';
+import { AuthModule } from '@/store/modules/auth';
 import LoginPad from '@/components/LoginPad.vue';
 
 @Component({
@@ -19,30 +18,18 @@ import LoginPad from '@/components/LoginPad.vue';
   },
 })
 export default class extends Vue {
-  private token?: string;
-
-  private user?: User;
-
-  private rememberMe = false;
-
   private async handleLogin(
     email: string,
     password: string,
     rememberMe: boolean,
   ) {
     const login: Login = { email, password };
-    const { data } = await signIn(login);
-    if (data.ok) {
-      const { token, user } = data.data;
-      this.token = token;
-      this.user = user;
-      this.rememberMe = rememberMe;
-      localStorage.setItem('token', token);
+    await AuthModule.SignIn(login);
+    if (AuthModule.isLoggedIn) {
       if (rememberMe) {
         localStorage.setItem('email', email);
       }
-    } else {
-      // alert error
+      this.$router.replace('/');
     }
   }
 }

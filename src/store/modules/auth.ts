@@ -15,6 +15,8 @@ export interface AuthState {
 
 @Module({ dynamic: true, store, name: 'user' })
 class Auth extends VuexModule implements AuthState {
+  public isLoggedIn = false;
+
   public token?: string
 
   public user?: User
@@ -22,11 +24,20 @@ class Auth extends VuexModule implements AuthState {
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token;
+    this.isLoggedIn = true;
   }
 
   @Mutation
   private SET_USER(user: User) {
     this.user = user;
+  }
+
+  @Action
+  public async LoadToken() {
+    const token = localStorage.getItem('token');
+    if (token !== null) {
+      this.SET_TOKEN(token);
+    }
   }
 
   @Action
@@ -38,7 +49,7 @@ class Auth extends VuexModule implements AuthState {
       this.SET_TOKEN(token);
       this.SET_USER(user);
     } else {
-      // alert error
+      // handle error
     }
   }
 }
