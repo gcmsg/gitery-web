@@ -28,9 +28,15 @@ import { RouteConfig } from 'vue-router';
 
 @Component
 export default class NavigationBar extends Vue {
-  @Prop() routes!: RouteConfig[];
+  @Prop({ required: true }) routes!: RouteConfig[];
 
-  @Prop() onLoginBtnPressed!: Function;
+  @Prop({ required: true }) isLoggedIn!: boolean;
+
+  @Prop({ required: true }) onLoginBtnPressed!: Function;
+
+  private created() {
+    console.log('isLoggedIn:', this.isLoggedIn);
+  }
 
   private handleMenuSelect(key: string, keyPath: string) {
     console.log(key, keyPath, this.$route.path);

@@ -1,7 +1,11 @@
 <template>
   <el-container>
     <el-header>
-      <NavigationBar :routes="routes" :onLoginBtnPressed="onLoginBtnPressed" />
+      <NavigationBar
+        :routes="routes"
+        :isLoggedIn="isLoggedIn"
+        :onLoginBtnPressed="onLoginBtnPressed"
+      />
     </el-header>
     <el-main>
       <router-view />
@@ -13,6 +17,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
+import UserModule from '@/store/modules/user';
 import NavigationBar from '@/components/NavigationBar.vue';
 import HomeRoute from './router/home';
 import AboutRoute from './router/about';
@@ -25,6 +30,17 @@ import AboutRoute from './router/about';
 })
 export default class extends Vue {
   private routes: RouteConfig[] = [HomeRoute, AboutRoute];
+
+  // eslint-disable-next-line class-methods-use-this
+  private created() {
+    UserModule.LoadToken();
+    console.log(this.$store.state.auth);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get isLoggedIn() {
+    return UserModule.isLoggedIn;
+  }
 
   private onLoginBtnPressed() {
     this.$router.push('/login');

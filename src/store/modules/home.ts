@@ -12,7 +12,7 @@ export interface HomeState {
 }
 
 @Module({ dynamic: true, store, name: 'home' })
-class Home extends VuexModule implements HomeState {
+class HomeModule extends VuexModule implements HomeState {
   public tags: string[] = []
 
   public posts: PostState[] = []
@@ -20,4 +20,4 @@ class Home extends VuexModule implements HomeState {
   public isLoading = true
 }
 
-export const HomeModule = getModule(Home);
+export default getModule(HomeModule);

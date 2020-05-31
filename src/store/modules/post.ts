@@ -12,7 +12,7 @@ export interface PostState {
 }
 
 @Module({ dynamic: true, store, name: 'post' })
-class Post extends VuexModule implements PostState {
+class PostModule extends VuexModule implements PostState {
   public title = ''
 
   public author: object = {}
@@ -51,4 +51,4 @@ class Post extends VuexModule implements PostState {
   }
 }
 
-export const PostModule = getModule(Post);
+export default getModule(PostModule);

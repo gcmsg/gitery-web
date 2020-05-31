@@ -1,9 +1,11 @@
 /* eslint-disable import/no-cycle */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { PostState } from './modules/post';
+
 import { HomeState } from './modules/home';
 import { UserState } from './modules/user';
+import { PostState } from './modules/post';
+
 
 Vue.use(Vuex);
 export interface RootState {

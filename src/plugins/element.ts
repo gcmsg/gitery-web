@@ -1,6 +1,7 @@
 import {
   Container, Header, Main,
   Menu, Submenu, MenuItem,
+  Dropdown, DropdownMenu, DropdownItem,
   Input, Checkbox,
   Button,
 } from 'element-ui';
@@ -12,6 +13,7 @@ locale.use(lang);
 export default [
   Container, Header, Main,
   Menu, Submenu, MenuItem,
+  Dropdown, DropdownMenu, DropdownItem,
   Input, Checkbox,
   Button,
 ];

@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Login } from '@/prototypes/auth';
-import { AuthModule } from '@/store/modules/auth';
+import UserModule from '@/store/modules/user';
 import LoginPad from '@/components/LoginPad.vue';
 
 @Component({
@@ -33,8 +33,8 @@ export default class extends Vue {
     rememberMe: boolean,
   ) {
     const login: Login = { email, password };
-    await AuthModule.SignIn(login);
-    if (AuthModule.isLoggedIn) {
+    await UserModule.SignIn(login);
+    if (UserModule.isLoggedIn) {
       if (rememberMe) {
         localStorage.setItem('email', email);
       } else {
