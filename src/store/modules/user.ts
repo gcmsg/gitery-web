@@ -9,19 +9,19 @@ import signIn from '@/api/auth';
 
 
 export interface UserState {
-  token?: string;
+  token: string;
   user?: User;
   isLoggedIn: boolean;
 }
 
 @Module({ dynamic: true, store, name: 'user' })
 class UserModule extends VuexModule implements UserState {
-  public token?: string
+  public token = ''
 
-  public user?: User
+  public user?: User;
 
   get isLoggedIn() {
-    return this.token !== undefined;
+    return this.token !== '';
   }
 
   @Mutation
@@ -31,7 +31,7 @@ class UserModule extends VuexModule implements UserState {
 
   @Mutation
   private REMOVE_TOKEN() {
-    this.token = undefined;
+    this.token = '';
   }
 
   @Mutation
