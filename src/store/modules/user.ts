@@ -11,6 +11,7 @@ import signIn from '@/api/auth';
 export interface UserState {
   token?: string;
   user?: User;
+  isLoggedIn: boolean;
 }
 
 @Module({ dynamic: true, store, name: 'user' })
@@ -29,8 +30,18 @@ class UserModule extends VuexModule implements UserState {
   }
 
   @Mutation
+  private REMOVE_TOKEN() {
+    this.token = undefined;
+  }
+
+  @Mutation
   private SET_USER(user: User) {
     this.user = user;
+  }
+
+  @Mutation
+  private REMOVE_USER() {
+    this.user = undefined;
   }
 
   @Action
@@ -52,6 +63,13 @@ class UserModule extends VuexModule implements UserState {
     } else {
       // handle error
     }
+  }
+
+  @Action
+  public SignOut() {
+    localStorage.removeItem('token');
+    this.REMOVE_TOKEN();
+    this.REMOVE_USER();
   }
 }
 

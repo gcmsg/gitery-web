@@ -4,7 +4,8 @@
       <NavigationBar
         :routes="routes"
         :isLoggedIn="isLoggedIn"
-        :onLoginBtnPressed="onLoginBtnPressed"
+        :onLoginPressed="onLoginPressed"
+        :onDropdownSelected="onDropdownSelected"
       />
     </el-header>
     <el-main>
@@ -31,19 +32,32 @@ import AboutRoute from './router/about';
 export default class extends Vue {
   private routes: RouteConfig[] = [HomeRoute, AboutRoute];
 
-  // eslint-disable-next-line class-methods-use-this
   private created() {
     UserModule.LoadToken();
     console.log(this.$store.state.auth);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get isLoggedIn() {
     return UserModule.isLoggedIn;
   }
 
-  private onLoginBtnPressed() {
+  private onLoginPressed() {
     this.$router.push('/login');
+  }
+
+  private onDropdownSelected(commend: string) {
+    switch (commend) {
+      case 'profile':
+        break;
+      case 'logout':
+        UserModule.SignOut();
+        if (this.$router.currentRoute.path !== '/') {
+          this.$router.replace('/');
+        }
+        break;
+      default:
+        break;
+    }
   }
 }
 </script>
