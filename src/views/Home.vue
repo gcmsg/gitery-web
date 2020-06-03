@@ -1,8 +1,16 @@
 <template>
-  <div class="home">
-    <div v-for="post in posts" v-bind:key="post.id">
-      <h6 v-text="post.title" />
-    </div>
+  <div>
+    <el-card
+      v-for="post in posts"
+      v-bind:key="post.id"
+      shadow="hover"
+      class="box-card"
+    >
+      <div class="card-content">
+        <h4>{{post.title}}</h4>
+        <p>{{post.content}}</p>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -32,3 +40,12 @@ export default class extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.box-card {
+  margin: 15px 10px;
+  .card-content {
+    display: flex;
+  }
+}
+</style>

@@ -46,12 +46,6 @@ export default class NavigationBar extends Vue {
 
   @Prop({ required: true }) onDropdownSelected!: Function;
 
-  // @PropSync('isLoggedIn', { type: Boolean }) syncedIsLoggedIn!: boolean;
-
-  private created() {
-    console.log('isLoggedIn:', this.isLoggedIn);
-  }
-
   private handleMenuSelect(key: string, keyPath: string) {
     console.log(key, keyPath, this.$route.path);
   }

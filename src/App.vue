@@ -34,7 +34,6 @@ export default class extends Vue {
 
   private created() {
     UserModule.LoadToken();
-    console.log(this.$store.state.auth);
   }
 
   get isLoggedIn() {
