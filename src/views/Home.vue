@@ -1,16 +1,6 @@
 <template>
   <div>
-    <el-card
-      v-for="post in posts"
-      v-bind:key="post.id"
-      shadow="hover"
-      class="box-card"
-    >
-      <div class="card-content">
-        <h4>{{post.title}}</h4>
-        <p>{{post.content}}</p>
-      </div>
-    </el-card>
+    <PostCard v-for="post in posts" :post="post" :key="post.id" />
   </div>
 </template>
 
@@ -18,10 +8,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Post } from '@/prototypes/post';
 import { getRecentPosts } from '@/api/post';
+import PostCard from '@/components/PostCard.vue';
 
 @Component({
   name: 'home',
-  components: {},
+  components: {
+    PostCard,
+  },
 })
 export default class extends Vue {
   private posts: Post[] = [];
@@ -42,10 +35,4 @@ export default class extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.box-card {
-  margin: 15px 10px;
-  .card-content {
-    display: flex;
-  }
-}
 </style>
