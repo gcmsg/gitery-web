@@ -4,7 +4,7 @@ import request from '@/utils/request';
 import { Post } from '@/prototypes/post';
 import { ServerResponse } from '@/prototypes/response';
 
-export function getRecentPosts(): AxiosPromise<ServerResponse<Post[]>> {
+export function getLatestPosts(): AxiosPromise<ServerResponse<Post[]>> {
   return request({ url: '/post?limit=10&offset=0', method: 'get' });
 }
 
