@@ -1,11 +1,7 @@
 <template>
   <div>
-    <div class="checkbox">
-      <input
-        type="checkbox"
-        id="editable"
-        v-model="editable"
-      />
+    <div v-if="!readOnly" class="checkbox">
+      <input type="checkbox" id="editable" v-model="editable" />
       <label for="editable"> editable</label>
     </div>
     <editor-menu-bar
@@ -59,11 +55,7 @@
       </div>
     </editor-menu-bar>
     <editor-content :editor="editor" />
-    <el-button
-      class="save-button"
-      type="primary"
-      @click="$emit('onSave')"
-    >
+    <el-button class="save-button" type="primary" @click="$emit('save')">
       Save
     </el-button>
   </div>
@@ -94,9 +86,11 @@ import {
 export default class extends Vue {
   @Prop({ default: '' }) content;
 
-  @Prop() onTitleChanged;
+  @Prop({ default: true }) readOnly;
 
-  @Prop() onContentChanged;
+  @Prop({ required: false }) onTitleChanged;
+
+  @Prop({ required: false }) onContentChanged;
 
   editable = false;
 
@@ -136,10 +130,6 @@ export default class extends Vue {
   @Watch('content')
   onContentPropUpdate(value) {
     this.editor.setContent(value);
-  }
-
-  onSaveBtnPressed() {
-    console.log('save');
   }
 }
 </script>

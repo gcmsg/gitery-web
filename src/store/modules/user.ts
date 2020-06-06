@@ -2,9 +2,11 @@
 import {
   VuexModule, Module, getModule, Action, Mutation,
 } from 'vuex-module-decorators';
+import Base64URL from '@/utils/base64URL';
 import store from '@/store';
 import { User } from '@/prototypes/user';
-import { Login } from '@/prototypes/auth';
+import { Login, JwtPayload } from '@/prototypes/auth';
+import { getUser } from '@/api/user';
 import signIn from '@/api/auth';
 
 
@@ -49,6 +51,19 @@ class UserModule extends VuexModule implements UserState {
     const token = localStorage.getItem('token');
     if (token !== null) {
       this.SET_TOKEN(token);
+      // extract partial user info from JWT
+      const encodedPayload = token.split('.')[1];
+      const payload: JwtPayload = JSON.parse(Base64URL.decode(encodedPayload));
+      this.SET_USER({ id: payload.pub.userID, email: payload.pub.email } as User);
+
+      // fetch current user info from server
+      const { data } = await getUser();
+      if (data.ok) {
+        const user: User = data.data;
+        this.SET_USER(user);
+      } else {
+        // handle error
+      }
     }
   }
 

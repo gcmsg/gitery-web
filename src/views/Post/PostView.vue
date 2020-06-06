@@ -3,9 +3,10 @@
     <PostEditor
       v-if="!isLoading"
       :content="content"
+      :readOnly="!allowEditing"
       :onTitleChanged="onPostTitleChanged"
       :onContentChanged="onPostContentChanged"
-      @onSave="onPostSave"
+      @save="onPostSave"
     />
   </div>
 </template>
@@ -13,6 +14,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
+import UserModule from '@/store/modules/user';
 import PostEditor from '@/components/PostEditor.vue';
 
 @Component({
@@ -26,6 +28,10 @@ export default class extends Vue {
 
   private get content() {
     return PostModule.currentPost.content;
+  }
+
+  private get allowEditing() {
+    return UserModule.isLoggedIn && PostModule.currentPost.userID === UserModule.user.id;
   }
 
   private async created() {
