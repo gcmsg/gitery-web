@@ -1,6 +1,11 @@
 <template>
   <div>
-    <PostCard v-for="post in posts" :post="post" :key="post.id" />
+    <PostCard
+      v-for="post in posts"
+      :post="post"
+      :key="post.id"
+      @pressed="onPostCardPressed"
+    />
   </div>
 </template>
 
@@ -26,6 +31,10 @@ export default class extends Vue {
 
   private async getPosts() {
     await HomeModule.GetLatestPosts();
+  }
+
+  private onPostCardPressed() {
+    this.$router.push('/post');
   }
 }
 </script>

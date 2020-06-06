@@ -9,7 +9,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import PostEditor from '@/components/PostEditor.vue';
 
 @Component({
-  name: 'editor',
+  name: 'post-view',
   components: {
     PostEditor,
   },
