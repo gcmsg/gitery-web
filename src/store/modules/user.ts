@@ -10,7 +10,7 @@ import signIn from '@/api/auth';
 
 export interface UserState {
   token: string;
-  user?: User;
+  user: User;
   isLoggedIn: boolean;
 }
 
@@ -18,7 +18,7 @@ export interface UserState {
 class UserModule extends VuexModule implements UserState {
   public token = ''
 
-  public user?: User;
+  public user = {} as User;
 
   get isLoggedIn() {
     return this.token !== '';
@@ -41,7 +41,7 @@ class UserModule extends VuexModule implements UserState {
 
   @Mutation
   private REMOVE_USER() {
-    this.user = undefined;
+    this.user = {} as User;
   }
 
   @Action

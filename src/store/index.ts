@@ -2,14 +2,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import { HomeState } from './modules/home';
 import { UserState } from './modules/user';
 import { PostState } from './modules/post';
 
 
 Vue.use(Vuex);
 export interface RootState {
-  home: HomeState;
   user: UserState;
   post: PostState;
 }

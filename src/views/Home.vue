@@ -11,8 +11,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HomeModule from '@/store/modules/home';
+import PostModule from '@/store/modules/post';
 import PostCard from '@/components/PostCard.vue';
+import { Post } from '@/prototypes/post';
 
 @Component({
   name: 'home',
@@ -21,20 +22,21 @@ import PostCard from '@/components/PostCard.vue';
   },
 })
 export default class extends Vue {
-  get posts() {
-    return HomeModule.posts;
+  private get posts() {
+    return PostModule.posts;
   }
 
-  created() {
+  private created() {
     this.getPosts();
   }
 
   private async getPosts() {
-    await HomeModule.GetLatestPosts();
+    await PostModule.GetLatestPosts();
   }
 
-  private onPostCardPressed() {
-    this.$router.push('/post');
+  private onPostCardPressed(post: Post) {
+    PostModule.PresetCurrentPost(post);
+    this.$router.push(`/post/${post.id}`);
   }
 }
 </script>

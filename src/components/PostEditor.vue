@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="checkbox">
-      <input type="checkbox" id="editable" v-model="editable" />
+      <input
+        type="checkbox"
+        id="editable"
+        v-model="editable"
+      />
       <label for="editable"> editable</label>
     </div>
     <editor-menu-bar
@@ -55,6 +59,13 @@
       </div>
     </editor-menu-bar>
     <editor-content :editor="editor" />
+    <el-button
+      class="save-button"
+      type="primary"
+      @click="$emit('onSave')"
+    >
+      Save
+    </el-button>
   </div>
 </template>
 
@@ -83,6 +94,10 @@ import {
 export default class extends Vue {
   @Prop({ default: '' }) content;
 
+  @Prop() onTitleChanged;
+
+  @Prop() onContentChanged;
+
   editable = false;
 
   editor;
@@ -99,6 +114,11 @@ export default class extends Vue {
         new Italic(),
       ],
       content: this.content,
+      onUpdate: ({ getHTML }) => {
+        // get new content on update
+        const newContent = getHTML();
+        this.onContentChanged(newContent);
+      },
     });
   }
 
@@ -107,10 +127,19 @@ export default class extends Vue {
   }
 
   @Watch('editable')
-  onEditableChanged() {
+  onEditableChanged(value) {
     this.editor.setOptions({
-      editable: this.editable,
+      editable: value,
     });
+  }
+
+  @Watch('content')
+  onContentPropUpdate(value) {
+    this.editor.setContent(value);
+  }
+
+  onSaveBtnPressed() {
+    console.log('save');
   }
 }
 </script>
@@ -118,5 +147,8 @@ export default class extends Vue {
 <style lang="scss">
 .checkbox {
   margin-bottom: 1rem;
+}
+.save-button {
+  width: 18rem;
 }
 </style>

@@ -36,7 +36,7 @@ export default class extends Vue {
     UserModule.LoadToken();
   }
 
-  get isLoggedIn() {
+  private get isLoggedIn() {
     return UserModule.isLoggedIn;
   }
 

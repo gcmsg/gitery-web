@@ -1,64 +1,126 @@
 /* eslint-disable import/no-cycle */
 import {
-  VuexModule, Module, Action, Mutation, getModule,
+  VuexModule, Module, getModule, Action, Mutation,
 } from 'vuex-module-decorators';
 import store from '@/store';
 import { Post } from '@/prototypes/post';
-import { User } from '@/prototypes/user';
 import { Comment } from '@/prototypes/comment';
-import { getPost } from '@/api/post';
+import { getLatestPosts, getPost, updatePost } from '@/api/post';
 
 export interface PostState {
-  post?: Post;
+  tags: string[];
+  posts: Post[];
+  isLoading: boolean;
+  currentPost: Post;
+  draftPost: Post;
 }
 
-@Module({ dynamic: true, store, name: 'post' })
+@Module({ dynamic: true, store, name: 'home' })
 class PostModule extends VuexModule implements PostState {
-  public post?: Post;
+  public tags: string[] = []
+
+  public posts: Post[] = []
+
+  public isLoading = true
+
+  public currentPost = {} as Post;
+
+  public draftPost = {} as Post;
 
   @Mutation
-  private LOAD_POST(post: Post) {
-    this.post = post;
+  private SET_LOADING(isLoading: boolean) {
+    this.isLoading = isLoading;
   }
 
   @Mutation
-  private SET_TITLE(title: string) {
-    if (this.post) {
-      this.post.title = title;
+  private SET_POSTS(posts: Post[]) {
+    this.posts = posts;
+  }
+
+  @Mutation
+  private SET_CURRENT_POST(post: Post) {
+    this.currentPost = post;
+    this.draftPost = post;
+  }
+
+  @Mutation
+  private SAVE_POST() {
+    this.currentPost = this.draftPost;
+  }
+
+  @Mutation
+  private SET_DRAFT_POST_TITLE(title: string) {
+    if (this.draftPost) {
+      this.draftPost.title = title;
     }
   }
 
   @Mutation
-  private SET_AUTHOR(author: User) {
-    if (this.post) {
-      this.post.author = author;
+  private SET_DRAFT_POST_CONTENT(content: string) {
+    if (this.draftPost) {
+      this.draftPost.content = content;
     }
   }
 
   @Mutation
-  private SET_CONTENT(content: string) {
-    if (this.post) {
-      this.post.content = content;
-    }
-  }
-
-  @Mutation
-  private ADD_COMMENTS(comment: Comment) {
-    if (this.post) {
-      if (this.post.comments) {
-        this.post.comments.push(comment);
+  private ADD_COMMENT_FOR_CURRENT_POST(comment: Comment) {
+    if (this.currentPost) {
+      if (this.currentPost.comments) {
+        this.currentPost.comments.push(comment);
       } else {
-        this.post.comments = [comment];
+        this.currentPost.comments = [comment];
       }
     }
   }
 
   @Action
+  public async GetLatestPosts() {
+    this.SET_LOADING(true);
+    const { data } = await getLatestPosts();
+    this.SET_LOADING(false);
+    if (data.ok) {
+      const posts: Post[] = data.data;
+      this.SET_POSTS(posts);
+    } else {
+      // handle error
+    }
+  }
+
+  @Action
+  public async PresetCurrentPost(post: Post) {
+    this.SET_CURRENT_POST(post);
+  }
+
+  @Action
   public async fetchPostDetail(postID: number) {
     const { data } = await getPost(postID);
+
     if (data.ok) {
-      const post = data.data;
-      this.LOAD_POST(post);
+      const post: Post = data.data;
+      this.SET_CURRENT_POST(post);
+    } else {
+      // handle error
+    }
+  }
+
+  @Action
+  public updateDraftPostContent(content: string) {
+    this.SET_DRAFT_POST_TITLE(content);
+  }
+
+  @Action
+  public updateDraftPostTitle(title: string) {
+    this.SET_DRAFT_POST_CONTENT(title);
+  }
+
+  @Action
+  public async syncPostUpdate() {
+    const { data } = await updatePost(this.currentPost);
+    if (data.ok) {
+      this.SAVE_POST();
+      // const post: Post = data.data;
+      // notify success
+      console.log('update post success');
     } else {
       // handle error
     }

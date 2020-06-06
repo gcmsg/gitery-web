@@ -16,8 +16,9 @@ export function createPost(post: Post): AxiosPromise<ServerResponse<Post>> {
   return request({ url: '/post', method: 'post', data: post });
 }
 
-export function updatePost(id: number, post: Post): AxiosPromise<ServerResponse<Post>> {
-  return request({ url: `/post/${id}`, method: 'patch', data: post });
+export function updatePost(post: Post): AxiosPromise<ServerResponse<Post>> {
+  if (!post.id) return Promise.reject();
+  return request({ url: `/post/${post.id}`, method: 'patch', data: post });
 }
 
 export function deletePost(id: number): AxiosPromise<ServerResponse<Post>> {
