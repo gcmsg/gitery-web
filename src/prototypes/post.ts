@@ -4,7 +4,7 @@ import { User } from './user';
 export interface Post {
   id: number;
   title: string;
-  content: string;
+  content?: string;
   userID: number;
   createdAt: number;
   updatedAt: number;

@@ -1,34 +1,45 @@
 <template>
-  <div class="home">
-    <div v-for="post in posts" v-bind:key="post.id">
-      <h6 v-text="post.title" />
-    </div>
+  <div>
+    <PostCard
+      v-for="post in posts"
+      :post="post"
+      :key="post.id"
+      @pressed="onPostCardPressed"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import PostModule from '@/store/modules/post';
+import PostCard from '@/components/PostCard.vue';
 import { Post } from '@/prototypes/post';
-import { getRecentPosts } from '@/api/post';
 
 @Component({
-  name: 'Home',
-  components: {},
+  name: 'home',
+  components: {
+    PostCard,
+  },
 })
 export default class extends Vue {
-  private posts: Post[] = [];
+  private get posts() {
+    return PostModule.posts;
+  }
 
-  created() {
+  private created() {
     this.getPosts();
   }
 
   private async getPosts() {
-    const { data } = await getRecentPosts();
-    if (data.ok) {
-      this.posts = data.data;
-    } else {
-      // alert error
-    }
+    await PostModule.GetLatestPosts();
+  }
+
+  private onPostCardPressed(post: Post) {
+    PostModule.PresetCurrentPost(post);
+    this.$router.push(`/post/${post.id}`);
   }
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

@@ -1,11 +1,23 @@
-import { Menu, Submenu, MenuItem } from 'element-ui';
+import {
+  Container, Header, Main,
+  Row, Col,
+  Card,
+  Menu, Submenu, MenuItem,
+  Dropdown, DropdownMenu, DropdownItem,
+  Input, Checkbox,
+  Button,
+} from 'element-ui';
 import locale from 'element-ui/lib/locale';
 import lang from 'element-ui/lib/locale/lang/en';
 
 locale.use(lang);
 
 export default [
-  Menu,
-  Submenu,
-  MenuItem,
+  Container, Header, Main,
+  Row, Col,
+  Card,
+  Menu, Submenu, MenuItem,
+  Dropdown, DropdownMenu, DropdownItem,
+  Input, Checkbox,
+  Button,
 ];

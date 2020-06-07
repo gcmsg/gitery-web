@@ -3,13 +3,20 @@ import axios from 'axios';
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   timeout: 5000,
-  headers: { Authorization: localStorage.getItem('token') },
+  headers: { 'Content-Type': 'application/json' },
   // withCredentials: true // send cookies when cross-domain requests
 });
 
 // Request interceptors
 service.interceptors.request.use(
-  async (config) => config,
+  async (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
   (error) => Promise.reject(error),
 );
 

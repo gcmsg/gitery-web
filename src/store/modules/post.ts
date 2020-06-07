@@ -1,54 +1,130 @@
 /* eslint-disable import/no-cycle */
 import {
-  VuexModule, Module, Action, Mutation, getModule,
+  VuexModule, Module, getModule, Action, Mutation,
 } from 'vuex-module-decorators';
 import store from '@/store';
+import { Post } from '@/prototypes/post';
+import { Comment } from '@/prototypes/comment';
+import { getLatestPosts, getPost, updatePost } from '@/api/post';
 
 export interface PostState {
-  title: string;
-  author: {};
-  content: string;
-  comments: {}[];
+  tags: string[];
+  posts: Post[];
+  isLoading: boolean;
+  currentPost: Post;
+  draftPost: Post;
 }
 
 @Module({ dynamic: true, store, name: 'post' })
-class Post extends VuexModule implements PostState {
-  public title = ''
+class PostModule extends VuexModule implements PostState {
+  public tags: string[] = []
 
-  public author: object = {}
+  public posts: Post[] = []
 
-  public content = ''
+  public isLoading = true
 
-  public comments: {}[] = []
+  public currentPost = {} as Post;
+
+  public draftPost = {} as Post;
 
   @Mutation
-  private SET_TITLE(title: string) {
-    this.title = title;
+  private SET_LOADING(isLoading: boolean) {
+    this.isLoading = isLoading;
   }
 
   @Mutation
-  private SET_AUTHOR(author: object) {
-    this.author = author;
+  private SET_POSTS(posts: Post[]) {
+    this.posts = posts;
   }
 
   @Mutation
-  private SET_CONTENT(content: string) {
-    this.content = content;
+  private SET_CURRENT_POST(post: Post) {
+    this.currentPost = post;
+    this.draftPost = post;
   }
 
   @Mutation
-  private SET_COMMENTS(comments: {}[]) {
-    this.comments = comments;
+  private SAVE_POST() {
+    this.currentPost = this.draftPost;
+  }
+
+  @Mutation
+  private SET_DRAFT_POST_TITLE(title: string) {
+    if (this.draftPost) {
+      this.draftPost.title = title;
+    }
+  }
+
+  @Mutation
+  private SET_DRAFT_POST_CONTENT(content: string) {
+    if (this.draftPost) {
+      this.draftPost.content = content;
+    }
+  }
+
+  @Mutation
+  private ADD_COMMENT_FOR_CURRENT_POST(comment: Comment) {
+    if (this.currentPost) {
+      if (this.currentPost.comments) {
+        this.currentPost.comments.push(comment);
+      } else {
+        this.currentPost.comments = [comment];
+      }
+    }
   }
 
   @Action
-  public async fetchPostDetail() {
-    // TODO fetch post from backend
-    // this.SET_TITLE();
-    // this.SET_AUTHOR()
-    // this.SET_CONTENT()
-    this.SET_COMMENTS([]);
+  public async GetLatestPosts() {
+    this.SET_LOADING(true);
+    const { data } = await getLatestPosts();
+    this.SET_LOADING(false);
+    if (data.ok) {
+      const posts: Post[] = data.data;
+      this.SET_POSTS(posts);
+    } else {
+      // handle error
+    }
+  }
+
+  @Action
+  public async PresetCurrentPost(post: Post) {
+    this.SET_CURRENT_POST(post);
+  }
+
+  @Action
+  public async fetchPostDetail(postID: number) {
+    const { data } = await getPost(postID);
+
+    if (data.ok) {
+      const post: Post = data.data;
+      this.SET_CURRENT_POST(post);
+    } else {
+      // handle error
+    }
+  }
+
+  @Action
+  public updateDraftPostContent(content: string) {
+    this.SET_DRAFT_POST_TITLE(content);
+  }
+
+  @Action
+  public updateDraftPostTitle(title: string) {
+    this.SET_DRAFT_POST_CONTENT(title);
+  }
+
+  @Action
+  public async syncPostUpdate() {
+    const { data } = await updatePost(this.currentPost);
+    if (data.ok) {
+      this.SAVE_POST();
+      // const post: Post = data.data;
+      // notify success
+      console.log('update post success');
+    } else {
+      // handle error
+    }
   }
 }
 
-export const PostModule = getModule(Post);
+export default getModule(PostModule);

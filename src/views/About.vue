@@ -1,18 +1,23 @@
 <template>
-  <div class="about">
+  <div>
     <img alt="Vue logo" src="../assets/logo.png" />
-    <About name="world" initialEnthusiasm="5" />
+    <About :name="name" :initialEnthusiasm="initialEnthusiasm" />
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 import About from '@/components/About.vue';
 
-export default {
-  name: 'Home',
+@Component({
+  name: 'about',
   components: {
     About,
   },
-};
+})
+export default class extends Vue {
+  private name = 'world';
+
+  private initialEnthusiasm = 5;
+}
 </script>
