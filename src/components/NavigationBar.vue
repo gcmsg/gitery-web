@@ -12,22 +12,28 @@
           :route="route"
           :key="route.path"
           :index="route.path"
-        >{{ route.name }}</el-menu-item>
+        >
+          {{ route.name }}
+        </el-menu-item>
       </el-menu>
     </div>
 
-    <div class="login">
-      <el-dropdown @command="onDropdownSelected" v-if="isLoggedIn">
-        <span class="el-dropdown-link">
-          My
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
+    <div class="user-menu">
+      <el-dropdown v-if="isLoggedIn" @command="onDropdownSelected">
+        <div class="dropdown-trigger">
+          <span class="el-dropdown-link">
+            My
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+        </div>
+
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="profile">Profile</el-dropdown-item>
           <el-dropdown-item command="logout">Sign Out</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-button @click="onLoginPressed" type="text" v-else>Login</el-button>
+
+      <el-button v-else @click="onLoginPressed" type="text">Login</el-button>
     </div>
   </div>
 </template>
@@ -60,13 +66,16 @@ export default class NavigationBar extends Vue {
   .menu {
     flex: 1;
   }
-  .login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 61px;
+  .user-menu {
     border-bottom: solid 1px #e6e6e6;
     cursor: pointer;
+    .dropdown-trigger {
+      height: 60px;
+      padding: 0 15px 0 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
 </style>

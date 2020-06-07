@@ -1,16 +1,9 @@
 import { RouteConfig } from 'vue-router';
 
 const route: RouteConfig = {
-  path: '/post',
+  path: '/post/:id(\\d+)',
   name: 'Post',
-  component: () => import(/* webpackChunkName: "post" */ '../views/Post/index.vue'),
-  children: [
-    {
-      path: ':id(\\d+)',
-      name: 'PostView',
-      component: () => import('../views/Post/PostView.vue'),
-    },
-  ],
+  component: () => import(/* webpackChunkName: "post" */ '../views/Post.vue'),
 };
 
 export default route;

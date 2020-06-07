@@ -1,17 +1,21 @@
 <template>
-  <el-container>
-    <el-header>
-      <NavigationBar
-        :routes="routes"
-        :isLoggedIn="isLoggedIn"
-        :onLoginPressed="onLoginPressed"
-        :onDropdownSelected="onDropdownSelected"
-      />
-    </el-header>
-    <el-main>
-      <router-view />
-    </el-main>
-  </el-container>
+  <el-row type="flex" justify="center">
+    <el-col :xs="24" :md="20" :lg="16">
+      <el-container>
+        <el-header>
+          <NavigationBar
+            :routes="routes"
+            :isLoggedIn="isLoggedIn"
+            :onLoginPressed="onLoginPressed"
+            :onDropdownSelected="onDropdownSelected"
+          />
+        </el-header>
+        <el-main>
+          <router-view />
+        </el-main>
+      </el-container>
+    </el-col>
+  </el-row>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,6 @@
 import {
   Container, Header, Main,
+  Row, Col,
   Card,
   Menu, Submenu, MenuItem,
   Dropdown, DropdownMenu, DropdownItem,
@@ -13,6 +14,7 @@ locale.use(lang);
 
 export default [
   Container, Header, Main,
+  Row, Col,
   Card,
   Menu, Submenu, MenuItem,
   Dropdown, DropdownMenu, DropdownItem,

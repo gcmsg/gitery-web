@@ -15,7 +15,7 @@ export interface PostState {
   draftPost: Post;
 }
 
-@Module({ dynamic: true, store, name: 'home' })
+@Module({ dynamic: true, store, name: 'post' })
 class PostModule extends VuexModule implements PostState {
   public tags: string[] = []
 
