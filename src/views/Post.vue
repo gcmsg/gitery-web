@@ -1,14 +1,24 @@
 <template>
-  <div>
-    <PostEditor
-      v-if="!isLoading"
-      :content="content"
-      :readOnly="!allowEditing"
-      :onTitleChanged="onPostTitleChanged"
-      :onContentChanged="onPostContentChanged"
-      @save="onPostSave"
-    />
-  </div>
+  <el-row>
+    <el-col :xs="24" :sm="18">
+      <PostEditor
+        v-if="!isLoading"
+        :content="content"
+        :editable="editable"
+        :onTitleChanged="onPostTitleChanged"
+        :onContentChanged="onPostContentChanged"
+      />
+    </el-col>
+    <el-col :xs="24" :sm="6" v-if="allowEditing">
+      <div class="checkbox">
+        <input type="checkbox" id="editable" v-model="editable" />
+        <label for="editable"> editable</label>
+      </div>
+      <el-button class="save-button" type="primary" @click="onPostSave">
+        Save
+      </el-button>
+    </el-col>
+  </el-row>
 </template>
 
 <script lang="ts">
@@ -25,6 +35,8 @@ import PostEditor from '@/components/PostEditor.vue';
 })
 export default class extends Vue {
   private isLoading = true;
+
+  private editable = false;
 
   private get content() {
     return PostModule.currentPost.content;
@@ -51,6 +63,7 @@ export default class extends Vue {
   }
 
   private async onPostSave() {
+    this.editable = false;
     await PostModule.syncPostUpdate();
   }
 }
