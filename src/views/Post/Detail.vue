@@ -1,20 +1,35 @@
 <template>
   <el-row>
-    <el-col :xs="24" :sm="18">
+    <el-col
+      :xs="24"
+      :sm="18"
+    >
       <PostEditor
-        v-if="!isLoading"
         :content="content"
         :editable="editable"
         :onTitleChanged="onPostTitleChanged"
         :onContentChanged="onPostContentChanged"
       />
     </el-col>
-    <el-col :xs="24" :sm="6" v-if="allowEditing">
-      <div class="checkbox">
-        <input type="checkbox" id="editable" v-model="editable" />
+    <el-col
+      :xs="24"
+      :sm="6"
+      v-if="allowEditing"
+    >
+      <div class="
+      checkbox">
+        <input
+          type="checkbox"
+          id="editable"
+          v-model="editable"
+        />
         <label for="editable"> editable</label>
       </div>
-      <el-button class="save-button" type="primary" @click="onPostSave">
+      <el-button
+        class="save-button"
+        type="primary"
+        @click="onPostSave"
+      >
         Save
       </el-button>
     </el-col>

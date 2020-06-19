@@ -27,7 +27,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class LoginPad extends Vue {
-  @Prop({ required: true }) handleLogin!: Function;
+  @Prop({ required: true }) handleLogin!: (
+    email: string,
+    password: string,
+    rememberMe: boolean,
+  ) => void;
 
   @Prop({ default: '' }) defaultEmail!: string;
 

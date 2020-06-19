@@ -61,11 +61,11 @@ export default class NavigationBar extends Vue {
 
   @Prop({ required: true }) isLoggedIn!: boolean;
 
-  @Prop({ required: true }) onLoginPressed!: Function;
+  @Prop({ required: true }) onLoginPressed!: () => void;
 
-  @Prop({ required: true }) onDropdownSelected!: Function;
+  @Prop({ required: true }) onDropdownSelected!: () => void;
 
-  @Prop({ required: true }) onComposePressed!: Function;
+  @Prop({ required: true }) onComposePressed!: () => void;
 
   private handleMenuSelect(key: string, keyPath: string) {
     console.log(key, keyPath, this.$route.path);
