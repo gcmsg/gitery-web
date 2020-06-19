@@ -1,13 +1,24 @@
 <template>
   <div class="login-pad">
     <div class="input-container">
-      <el-input v-model="email" placeholder="请输入内容"></el-input>
+      <el-input
+        v-model="email"
+        placeholder="请输入内容"
+      ></el-input>
     </div>
     <div class="input-container">
-      <el-input v-model="password" placeholder="请输入密码" show-password></el-input>
+      <el-input
+        v-model="password"
+        placeholder="请输入密码"
+        show-password
+      ></el-input>
     </div>
     <el-checkbox v-model="rememberMe">Remember Me!</el-checkbox>
-    <el-button class="login-button" type="primary" @click="onLoginPressed">Login</el-button>
+    <el-button
+      class="login-button"
+      type="primary"
+      @click="onLoginPressed"
+    >Login</el-button>
   </div>
 </template>
 

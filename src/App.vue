@@ -1,6 +1,13 @@
 <template>
-  <el-row type="flex" justify="center">
-    <el-col :xs="24" :md="20" :lg="16">
+  <el-row
+    type="flex"
+    justify="center"
+  >
+    <el-col
+      :xs="24"
+      :md="20"
+      :lg="16"
+    >
       <el-container>
         <el-header>
           <NavigationBar
@@ -8,6 +15,7 @@
             :isLoggedIn="isLoggedIn"
             :onLoginPressed="onLoginPressed"
             :onDropdownSelected="onDropdownSelected"
+            :onComposePressed="onComposePressed"
           />
         </el-header>
         <el-main>
@@ -48,9 +56,18 @@ export default class extends Vue {
     this.$router.push('/login');
   }
 
+  private onComposePressed() {
+    this.$router.push('/post/compose');
+  }
+
   private onDropdownSelected(commend: string) {
     switch (commend) {
       case 'profile':
+        if (UserModule.isLoggedIn) {
+          this.$router.push('/profile');
+        } else {
+          this.onLoginPressed();
+        }
         break;
       case 'logout':
         UserModule.SignOut();

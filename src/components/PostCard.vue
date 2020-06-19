@@ -1,6 +1,10 @@
 <template>
   <div @click="$emit('pressed', post)">
-    <el-card v-bind:key="post.id" shadow="hover" class="box-card">
+    <el-card
+      v-bind:key="post.id"
+      shadow="hover"
+      class="box-card"
+    >
       <div class="card-content">
         <h3>{{ post.title }}</h3>
         <div class="post-info">
