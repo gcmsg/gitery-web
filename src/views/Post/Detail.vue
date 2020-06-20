@@ -1,49 +1,60 @@
 <template>
-  <el-row>
-    <el-col
-      :xs="24"
-      :sm="18"
-    >
-      <div class="post-section">
-        <PostEditor
-          :editable="editable"
-          :title="title"
-          :content="content"
-          :onTitleChanged="onPostTitleChanged"
-          :onContentChanged="onPostContentChanged"
-        />
+  <div>
+    <el-row>
+      <div class="breadcrumb">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
+          <el-breadcrumb-item>{{post.title}}</el-breadcrumb-item>
+        </el-breadcrumb>
       </div>
-
-    </el-col>
-    <el-col
-      :xs="24"
-      :sm="5"
-      v-if="allowEditing"
-    >
-      <div class="side-bar">
-        <div class="checkbox">
-          <input
-            type="checkbox"
-            id="editable"
-            v-model="editable"
+    </el-row>
+    <el-row>
+      <el-col
+        :xs="24"
+        :sm="18"
+      >
+        <div class="post-section">
+          <PostEditor
+            :editable="editable"
+            :title="post.title"
+            :content="post.content"
+            :onTitleChanged="onPostTitleChanged"
+            :onContentChanged="onPostContentChanged"
           />
-          <label for="editable"> editable</label>
         </div>
-        <el-button
-          class="save-button"
-          type="primary"
-          size="medium"
-          @click="onPostSave"
-        >
-          Save
-        </el-button>
-      </div>
-    </el-col>
-  </el-row>
+      </el-col>
+
+      <el-col
+        :xs="24"
+        :sm="6"
+      >
+        <div class="side-bar">
+          <div>
+            <h3>Author: {{post.author.nickname || 'Anonymous'}}</h3>
+            <p>Created At: {{post.createdAt}}</p>
+            <p>Updated At: {{post.updatedAt}}</p>
+          </div>
+          <el-divider></el-divider>
+          <el-button
+            v-if="allowEditing"
+            type="primary"
+            size="medium"
+            @click="onEditButtonPressed"
+          >
+            {{editable ? 'Save': 'Edit'}}
+          </el-button>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.breadcrumb {
+  padding: 8px 15px;
+}
 .post-section {
+  padding-right: 15px;
   border-right: 1px solid #dcdfe6;
 }
 .side-bar {
@@ -66,12 +77,8 @@ import PostEditor from '@/components/Post/PostEditor.vue';
 export default class extends Vue {
   private editable = false;
 
-  private get title() {
-    return PostModule.currentPost.title;
-  }
-
-  private get content() {
-    return PostModule.currentPost.content;
+  private get post() {
+    return PostModule.currentPost;
   }
 
   private get allowEditing() {
@@ -85,17 +92,19 @@ export default class extends Vue {
     }
   }
 
+  private onEditButtonPressed() {
+    if (this.editable) {
+      PostModule.syncPostUpdate();
+    }
+    this.editable = !this.editable;
+  }
+
   private onPostTitleChanged(title: string) {
     PostModule.updateDraftPostTitle(title);
   }
 
   private onPostContentChanged(content: string) {
     PostModule.updateDraftPostContent(content);
-  }
-
-  private async onPostSave() {
-    this.editable = false;
-    await PostModule.syncPostUpdate();
   }
 }
 </script>

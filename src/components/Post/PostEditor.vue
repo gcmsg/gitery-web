@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="title">
       <el-input
         v-if="editable"
@@ -72,23 +72,20 @@
 </template>
 
 <style lang="scss">
-.container {
-  padding-right: 15px;
-  .title {
-    height: 64px;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-  }
-  .content {
-    padding: 0 15px 30px;
-    min-height: 30vh;
-    &.editing {
-      padding: 15px 14px 30px;
-      border: 1px solid #dcdfe6;
-      border-radius: 5px;
-    }
+.title {
+  height: 64px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+.content {
+  padding: 0 15px 30px;
+  min-height: 30vh;
+  &.editing {
+    padding: 15px 14px 30px;
+    border: 1px solid #dcdfe6;
+    border-radius: 5px;
   }
 }
 </style>
