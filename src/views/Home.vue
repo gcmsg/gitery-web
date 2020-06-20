@@ -12,7 +12,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
-import PostCard from '@/components/PostCard.vue';
+import PostCard from '@/components/Post/PostCard.vue';
 import { Post } from '@/prototypes/post';
 
 @Component({
@@ -40,6 +40,3 @@ export default class extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

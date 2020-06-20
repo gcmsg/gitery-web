@@ -51,28 +51,6 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { RouteConfig } from 'vue-router';
-
-@Component
-export default class NavigationBar extends Vue {
-  @Prop({ required: true }) routes!: RouteConfig[];
-
-  @Prop({ required: true }) isLoggedIn!: boolean;
-
-  @Prop({ required: true }) onLoginPressed!: () => void;
-
-  @Prop({ required: true }) onDropdownSelected!: () => void;
-
-  @Prop({ required: true }) onComposePressed!: () => void;
-
-  private handleMenuSelect(key: string, keyPath: string) {
-    console.log(key, keyPath, this.$route.path);
-  }
-}
-</script>
-
 <style lang="scss" scoped>
 .header {
   display: flex;
@@ -97,3 +75,25 @@ export default class NavigationBar extends Vue {
   }
 }
 </style>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { RouteConfig } from 'vue-router';
+
+@Component
+export default class NavigationBar extends Vue {
+  @Prop({ required: true }) routes!: RouteConfig[];
+
+  @Prop({ required: true }) isLoggedIn!: boolean;
+
+  @Prop({ required: true }) onLoginPressed!: () => void;
+
+  @Prop({ required: true }) onDropdownSelected!: () => void;
+
+  @Prop({ required: true }) onComposePressed!: () => void;
+
+  private handleMenuSelect(key: string, keyPath: string) {
+    console.log(key, keyPath, this.$route.path);
+  }
+}
+</script>

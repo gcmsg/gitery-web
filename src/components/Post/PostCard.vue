@@ -17,6 +17,24 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+.box-card {
+  margin: 15px 10px;
+  cursor: pointer;
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .post-info {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-evenly;
+      align-items: flex-end;
+    }
+  }
+}
+</style>
+
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import moment from 'moment';
@@ -37,21 +55,3 @@ export default class PostCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.box-card {
-  margin: 15px 10px;
-  cursor: pointer;
-  .card-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .post-info {
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: space-evenly;
-      align-items: flex-end;
-    }
-  }
-}
-</style>

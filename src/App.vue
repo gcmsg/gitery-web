@@ -26,6 +26,53 @@
   </el-row>
 </template>
 
+<style lang="scss">
+html {
+  font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  * {
+    box-sizing: border-box;
+    outline: 0;
+  }
+  body {
+    margin: 0;
+    h1 {
+      margin-block-start: 0.6em;
+      margin-block-end: 0.6em;
+    }
+    h2 {
+      margin-block-start: 0.5em;
+      margin-block-end: 0.5em;
+    }
+    h3 {
+      margin-block-start: 0.4em;
+      margin-block-end: 0.4em;
+    }
+    h4 {
+      margin-block-start: 0.3em;
+      margin-block-end: 0.3em;
+    }
+    h5 {
+      margin-block-start: 0.2em;
+      margin-block-end: 0.2em;
+    }
+    h6 {
+      margin-block-start: 0.1em;
+      margin-block-end: 0.1em;
+    }
+  }
+}
+</style>
+
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
@@ -81,50 +128,3 @@ export default class extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-html {
-  font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
-    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  * {
-    box-sizing: border-box;
-    outline: 0;
-  }
-  body {
-    margin: 0;
-    h1 {
-      margin-block-start: 0.6em;
-      margin-block-end: 0.6em;
-    }
-    h2 {
-      margin-block-start: 0.5em;
-      margin-block-end: 0.5em;
-    }
-    h3 {
-      margin-block-start: 0.4em;
-      margin-block-end: 0.4em;
-    }
-    h4 {
-      margin-block-start: 0.3em;
-      margin-block-end: 0.3em;
-    }
-    h5 {
-      margin-block-start: 0.2em;
-      margin-block-end: 0.2em;
-    }
-    h6 {
-      margin-block-start: 0.1em;
-      margin-block-end: 0.1em;
-    }
-  }
-}
-</style>

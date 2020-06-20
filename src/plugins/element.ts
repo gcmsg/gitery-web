@@ -6,6 +6,8 @@ import {
   Dropdown, DropdownMenu, DropdownItem,
   Input, Checkbox,
   Button,
+  Loading,
+  Divider,
 } from 'element-ui';
 import locale from 'element-ui/lib/locale';
 import lang from 'element-ui/lib/locale/lang/en';
@@ -20,4 +22,6 @@ export default [
   Dropdown, DropdownMenu, DropdownItem,
   Input, Checkbox,
   Button,
+  Loading,
+  Divider,
 ];

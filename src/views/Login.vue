@@ -1,7 +1,13 @@
 <template>
   <div>
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <LoginPad :handleLogin="handleLogin" :defaultEmail="defaultEmail" />
+    <img
+      alt="Vue logo"
+      src="../assets/logo.png"
+    />
+    <LoginPad
+      :handleLogin="handleLogin"
+      :defaultEmail="defaultEmail"
+    />
   </div>
 </template>
 
@@ -9,7 +15,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Login } from '@/prototypes/auth';
 import UserModule from '@/store/modules/user';
-import LoginPad from '@/components/LoginPad.vue';
+import LoginPad from '@/components/Auth/LoginPad.vue';
 
 @Component({
   name: 'login',
@@ -45,6 +51,3 @@ export default class extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-</style>

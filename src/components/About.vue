@@ -6,6 +6,13 @@
   </div>
 </template>
 
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped >
+.greeting {
+  font-size: 20px;
+}
+</style>
+
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
@@ -32,10 +39,3 @@ export default class About extends Vue {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped >
-.greeting {
-  font-size: 20px;
-}
-</style>

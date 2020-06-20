@@ -4,44 +4,58 @@
       :xs="24"
       :sm="18"
     >
-      <PostEditor
-        :editable="editable"
-        :title="title"
-        :content="content"
-        :onTitleChanged="onPostTitleChanged"
-        :onContentChanged="onPostContentChanged"
-      />
+      <div class="post-section">
+        <PostEditor
+          :editable="editable"
+          :title="title"
+          :content="content"
+          :onTitleChanged="onPostTitleChanged"
+          :onContentChanged="onPostContentChanged"
+        />
+      </div>
+
     </el-col>
     <el-col
       :xs="24"
-      :sm="6"
+      :sm="5"
       v-if="allowEditing"
     >
-      <div class="checkbox">
-        <input
-          type="checkbox"
-          id="editable"
-          v-model="editable"
-        />
-        <label for="editable"> editable</label>
+      <div class="side-bar">
+        <div class="checkbox">
+          <input
+            type="checkbox"
+            id="editable"
+            v-model="editable"
+          />
+          <label for="editable"> editable</label>
+        </div>
+        <el-button
+          class="save-button"
+          type="primary"
+          size="medium"
+          @click="onPostSave"
+        >
+          Save
+        </el-button>
       </div>
-      <el-button
-        class="save-button"
-        type="primary"
-        size="medium"
-        @click="onPostSave"
-      >
-        Save
-      </el-button>
     </el-col>
   </el-row>
 </template>
+
+<style lang="scss" scoped>
+.post-section {
+  border-right: 1px solid #dcdfe6;
+}
+.side-bar {
+  padding: 15px;
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
-import PostEditor from '@/components/PostEditor.vue';
+import PostEditor from '@/components/Post/PostEditor.vue';
 
 @Component({
   name: 'post-view',
@@ -50,8 +64,6 @@ import PostEditor from '@/components/PostEditor.vue';
   },
 })
 export default class extends Vue {
-  private isLoading = true;
-
   private editable = false;
 
   private get title() {
@@ -70,7 +82,6 @@ export default class extends Vue {
     const postID = Number.parseInt(this.$route.params.id, 10);
     if (!Number.isNaN(postID)) {
       await PostModule.fetchPostDetail(postID);
-      this.isLoading = false;
     }
   }
 

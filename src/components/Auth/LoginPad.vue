@@ -22,6 +22,22 @@
   </div>
 </template>
 
+<style lang="scss" scoped>
+.login-pad {
+  height: 16rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+  .input-container {
+    width: 18rem;
+  }
+  .login-button {
+    width: 18rem;
+  }
+}
+</style>
+
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
@@ -46,19 +62,3 @@ export default class LoginPad extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.login-pad {
-  height: 16rem;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-around;
-  align-items: center;
-  .input-container {
-    width: 18rem;
-  }
-  .login-button {
-    width: 18rem;
-  }
-}
-</style>
