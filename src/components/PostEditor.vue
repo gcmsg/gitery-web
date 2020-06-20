@@ -1,5 +1,10 @@
 <template>
   <div :class="{ content: true, editing: editable }">
+    <el-input
+      v-model="draftTitle"
+      placeholder="Post title"
+    ></el-input>
+
     <editor-menu-bar
       v-if="editable"
       :editor="editor"
@@ -78,17 +83,28 @@ import {
   },
 })
 export default class extends Vue {
-  @Prop({ default: '' }) content;
-
   @Prop({ default: false }) editable;
+
+  @Prop({ default: '' }) title;
+
+  @Prop({ default: '' }) content;
 
   @Prop({ required: false }) onTitleChanged;
 
   @Prop({ required: false }) onContentChanged;
 
+  get draftTitle() {
+    return this.title;
+  }
+
+  set draftTitle(value) {
+    this.onTitleChanged(value);
+  }
+
   editor;
 
   created() {
+    this.draftTitle = this.title;
     this.editor = new Editor({
       editable: false,
       extensions: [
@@ -117,6 +133,11 @@ export default class extends Vue {
     this.editor.setOptions({
       editable: value,
     });
+  }
+
+  @Watch('title')
+  onTitlePropUpdate(value) {
+    this.draftTitle = value;
   }
 
   @Watch('content')

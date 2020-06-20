@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -9,7 +9,7 @@ const service = axios.create({
 
 // Request interceptors
 service.interceptors.request.use(
-  async (config) => {
+  async (config: AxiosRequestConfig) => {
     const token = localStorage.getItem('token');
     if (token) {
       // eslint-disable-next-line no-param-reassign
@@ -17,7 +17,7 @@ service.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error: Error) => Promise.reject(error),
 );
 
 // Response interceptors

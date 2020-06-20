@@ -104,13 +104,13 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public updateDraftPostContent(content: string) {
-    this.SET_DRAFT_POST_TITLE(content);
+  public updateDraftPostTitle(title: string) {
+    this.SET_DRAFT_POST_TITLE(title);
   }
 
   @Action
-  public updateDraftPostTitle(title: string) {
-    this.SET_DRAFT_POST_CONTENT(title);
+  public updateDraftPostContent(Content: string) {
+    this.SET_DRAFT_POST_CONTENT(Content);
   }
 
   @Action

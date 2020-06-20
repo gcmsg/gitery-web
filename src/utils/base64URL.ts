@@ -1,4 +1,3 @@
-
 function unescape(str: string): string {
   return (str + '==='.slice((str.length + 3) % 4))
     .replace(/-/g, '+')

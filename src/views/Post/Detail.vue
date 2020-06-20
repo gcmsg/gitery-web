@@ -5,8 +5,9 @@
       :sm="18"
     >
       <PostEditor
-        :content="content"
         :editable="editable"
+        :title="title"
+        :content="content"
         :onTitleChanged="onPostTitleChanged"
         :onContentChanged="onPostContentChanged"
       />
@@ -16,8 +17,7 @@
       :sm="6"
       v-if="allowEditing"
     >
-      <div class="
-      checkbox">
+      <div class="checkbox">
         <input
           type="checkbox"
           id="editable"
@@ -28,6 +28,7 @@
       <el-button
         class="save-button"
         type="primary"
+        size="medium"
         @click="onPostSave"
       >
         Save
@@ -53,6 +54,10 @@ export default class extends Vue {
 
   private editable = false;
 
+  private get title() {
+    return PostModule.currentPost.title;
+  }
+
   private get content() {
     return PostModule.currentPost.content;
   }
@@ -74,7 +79,7 @@ export default class extends Vue {
   }
 
   private onPostContentChanged(content: string) {
-    PostModule.updateDraftPostTitle(content);
+    PostModule.updateDraftPostContent(content);
   }
 
   private async onPostSave() {
