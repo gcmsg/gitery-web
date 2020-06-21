@@ -5,6 +5,7 @@
       src="../assets/logo.png"
     />
     <LoginPad
+      :loading="isLoading"
       :handleLogin="handleLogin"
       :defaultEmail="defaultEmail"
     />
@@ -24,6 +25,8 @@ import LoginPad from '@/components/Auth/LoginPad.vue';
   },
 })
 export default class extends Vue {
+  private isLoading = false;
+
   private defaultEmail = '';
 
   private created() {
@@ -39,7 +42,9 @@ export default class extends Vue {
     rememberMe: boolean,
   ) {
     const login: Login = { email, password };
+    this.isLoading = true;
     await UserModule.SignIn(login);
+    this.isLoading = false;
     if (UserModule.isLoggedIn) {
       if (rememberMe) {
         localStorage.setItem('email', email);

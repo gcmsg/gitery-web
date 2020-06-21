@@ -6,7 +6,7 @@ import store from '@/store';
 import { Post } from '@/prototypes/post';
 import { Comment } from '@/prototypes/comment';
 import {
-  getLatestPosts, getPost, updatePost, createPost,
+  getLatestPosts, getPost, updatePost, createPost, deletePost,
 } from '@/api/post';
 
 export interface PostState {
@@ -68,6 +68,12 @@ class PostModule extends VuexModule implements PostState {
     } else {
       this.posts.unshift(this.currentPost);
     }
+  }
+
+  @Mutation
+  private DELETE_POST_FROM_LIST() {
+    if (this.currentPost.id === undefined) return;
+    this.posts = this.posts.filter((post: Post) => post.id !== this.currentPost.id);
   }
 
   @Mutation
@@ -159,7 +165,7 @@ class PostModule extends VuexModule implements PostState {
 
   @Action
   public async syncPostUpdate() {
-    const { data } = await updatePost(this.currentPost);
+    const { data } = await updatePost(this.draftPost);
     if (data.ok) {
       this.SAVE_POST();
       this.SYNC_UPDATE_TO_LIST();
@@ -168,6 +174,14 @@ class PostModule extends VuexModule implements PostState {
       console.log('update post success');
     } else {
       // handle error
+    }
+  }
+
+  @Action
+  public async syncPostDelete() {
+    const { data } = await deletePost(this.currentPost.id);
+    if (data.ok) {
+      this.DELETE_POST_FROM_LIST();
     }
   }
 }

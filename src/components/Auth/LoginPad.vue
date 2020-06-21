@@ -4,6 +4,7 @@
       <el-input
         v-model="email"
         placeholder="请输入内容"
+        :disabled="loading"
       ></el-input>
     </div>
     <div class="input-container">
@@ -11,13 +12,18 @@
         v-model="password"
         placeholder="请输入密码"
         show-password
+        :disabled="loading"
       ></el-input>
     </div>
-    <el-checkbox v-model="rememberMe">Remember Me!</el-checkbox>
+    <el-checkbox
+      :disabled="loading"
+      v-model="rememberMe"
+    >Remember Me!</el-checkbox>
     <el-button
       class="login-button"
       type="primary"
       @click="onLoginPressed"
+      :loading="loading"
     >Login</el-button>
   </div>
 </template>
@@ -50,6 +56,8 @@ export default class LoginPad extends Vue {
   ) => void;
 
   @Prop({ default: '' }) defaultEmail!: string;
+
+  @Prop({ default: false }) loading!: boolean;
 
   private email = this.defaultEmail;
 

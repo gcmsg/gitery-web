@@ -8,7 +8,7 @@
       <div class="card-content">
         <h3>{{ post.title }}</h3>
         <div class="post-info">
-          <h4>{{ post.author.nickname }}</h4>
+          <h4>{{ post.author ? post.author.nickname : 'Anonymous' }}</h4>
           <h6>{{ updatedTime }}</h6>
         </div>
       </div>

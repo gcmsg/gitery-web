@@ -16,7 +16,7 @@
         <div class="post-section">
           <PostEditor
             :editable="editable"
-            :loading="isLoading"
+            :loading="isContentLoading"
             :title="post.title"
             :content="post.content"
             :onTitleChanged="onPostTitleChanged"
@@ -31,21 +31,37 @@
       >
         <div class="side-bar">
           <div>
-            <h4>Author: {{post.author.nickname || 'Anonymous'}}</h4>
+            <h4>Author: {{post.author ? post.author.nickname : 'Anonymous'}}</h4>
             <b>Created At:</b>
             <p v-text="createdTime"></p>
             <b>Updated At:</b>
             <p v-text="updatedTime"></p>
           </div>
           <el-divider></el-divider>
-          <el-button
-            v-if="allowEditing"
-            type="primary"
-            size="medium"
-            @click="onEditButtonPressed"
-          >
-            {{editable ? 'Save': 'Edit'}}
-          </el-button>
+          <div v-if="allowEditing">
+            <el-button
+              type="primary"
+              size="medium"
+              @click="onEditButtonPressed"
+              :loading="isActionLoading"
+              style="margin-right: 10px"
+            >
+              {{editable ? 'Save': 'Edit'}}
+            </el-button>
+            <el-popconfirm
+              title="这是一段内容确定删除吗？"
+              @onConfirm="onDeleteButtonPressed"
+            >
+              <el-button
+                slot="reference"
+                type="danger"
+                size="medium"
+                :loading="isActionLoading"
+              >
+                Delete
+              </el-button>
+            </el-popconfirm>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -76,22 +92,30 @@ import { formatUnixTimestamp } from '@/utils/format';
   },
 })
 export default class extends Vue {
+  private isActionLoading = false;
+
   private editable = false;
 
   private get post() {
     return PostModule.currentPost;
   }
 
-  private get isLoading() {
+  private get isContentLoading() {
     return !PostModule.currentPost.content;
   }
 
   private get createdTime() {
-    return formatUnixTimestamp(PostModule.currentPost.createdAt);
+    if (this.post.createdAt !== undefined) {
+      return formatUnixTimestamp(this.post.createdAt);
+    }
+    return '';
   }
 
   private get updatedTime() {
-    return formatUnixTimestamp(PostModule.currentPost.updatedAt);
+    if (this.post.createdAt !== undefined) {
+      return formatUnixTimestamp(this.post.updatedAt);
+    }
+    return '';
   }
 
   private get allowEditing() {
@@ -118,6 +142,12 @@ export default class extends Vue {
 
   private onPostContentChanged(content: string) {
     PostModule.updateDraftPostContent(content);
+  }
+
+  private async onDeleteButtonPressed() {
+    this.isActionLoading = true;
+    await PostModule.syncPostDelete();
+    this.$router.replace('/');
   }
 }
 </script>

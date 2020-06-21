@@ -70,8 +70,8 @@ html {
       margin-block-end: 0.1em;
     }
     p {
-      margin-block-start: 0.1em;
-      margin-block-end: 0.1em;
+      margin-block-start: 0.2em;
+      margin-block-end: 0.2em;
     }
     .breadcrumb-wrapper {
       padding: 8px 15px;
