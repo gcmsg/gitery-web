@@ -49,7 +49,8 @@
               {{editable ? 'Save': 'Edit'}}
             </el-button>
             <el-popconfirm
-              title="这是一段内容确定删除吗？"
+              placement="top"
+              title="Confirm to delete?"
               @onConfirm="onDeleteButtonPressed"
             >
               <el-button

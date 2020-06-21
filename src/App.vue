@@ -45,34 +45,6 @@ html {
   }
   body {
     margin: 0;
-    h1 {
-      margin-block-start: 0.6em;
-      margin-block-end: 0.6em;
-    }
-    h2 {
-      margin-block-start: 0.5em;
-      margin-block-end: 0.5em;
-    }
-    h3 {
-      margin-block-start: 0.4em;
-      margin-block-end: 0.4em;
-    }
-    h4 {
-      margin-block-start: 0.3em;
-      margin-block-end: 0.3em;
-    }
-    h5 {
-      margin-block-start: 0.2em;
-      margin-block-end: 0.2em;
-    }
-    h6 {
-      margin-block-start: 0.1em;
-      margin-block-end: 0.1em;
-    }
-    p {
-      margin-block-start: 0.2em;
-      margin-block-end: 0.2em;
-    }
     .breadcrumb-wrapper {
       padding: 8px 15px;
     }

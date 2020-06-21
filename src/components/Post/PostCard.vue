@@ -2,14 +2,13 @@
   <div @click="$emit('pressed', post)">
     <el-card
       v-bind:key="post.id"
-      shadow="hover"
       class="box-card"
     >
       <div class="card-content">
-        <h3>{{ post.title }}</h3>
+        <h1>{{ post.title }}</h1>
         <div class="post-info">
-          <h4>{{ post.author ? post.author.nickname : 'Anonymous' }}</h4>
-          <h6>{{ updatedTime }}</h6>
+          <h3>{{ post.author ? post.author.nickname : 'Anonymous' }}</h3>
+          <h4>{{ updatedTime }}</h4>
         </div>
       </div>
     </el-card>
