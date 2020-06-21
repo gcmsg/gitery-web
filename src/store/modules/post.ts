@@ -5,7 +5,9 @@ import {
 import store from '@/store';
 import { Post } from '@/prototypes/post';
 import { Comment } from '@/prototypes/comment';
-import { getLatestPosts, getPost, updatePost } from '@/api/post';
+import {
+  getLatestPosts, getPost, updatePost, createPost,
+} from '@/api/post';
 
 export interface PostState {
   tags: string[];
@@ -23,9 +25,15 @@ class PostModule extends VuexModule implements PostState {
 
   public isLoading = true
 
-  public currentPost = {} as Post;
+  public currentPost = {
+    title: '',
+    content: '',
+  } as Post;
 
-  public draftPost = {} as Post;
+  public draftPost = {
+    title: '',
+    content: '',
+  } as Post;
 
   @Mutation
   private SET_LOADING(isLoading: boolean) {
@@ -38,9 +46,28 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
+  private INIT_DRAFT_POST() {
+    this.draftPost = {
+      title: '',
+      content: '',
+    } as Post;
+  }
+
+  @Mutation
   private SET_CURRENT_POST(post: Post) {
     this.currentPost = post;
     this.draftPost = post;
+  }
+
+  @Mutation
+  private SYNC_UPDATE_TO_LIST() {
+    if (this.currentPost.id === undefined) return;
+    const relatedIndex = this.posts.findIndex((post: Post) => post.id === this.currentPost.id);
+    if (relatedIndex >= 0) {
+      this.posts[relatedIndex] = this.currentPost;
+    } else {
+      this.posts.unshift(this.currentPost);
+    }
   }
 
   @Mutation
@@ -104,6 +131,11 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
+  public initDraftPost() {
+    this.INIT_DRAFT_POST();
+  }
+
+  @Action
   public updateDraftPostTitle(title: string) {
     this.SET_DRAFT_POST_TITLE(title);
   }
@@ -114,10 +146,23 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
+  public async syncPostCreate() {
+    const { data } = await createPost(this.draftPost);
+    if (data.ok) {
+      const post: Post = data.data;
+      this.SET_CURRENT_POST(post);
+      this.SYNC_UPDATE_TO_LIST();
+    } else {
+      // handle error
+    }
+  }
+
+  @Action
   public async syncPostUpdate() {
     const { data } = await updatePost(this.currentPost);
     if (data.ok) {
       this.SAVE_POST();
+      this.SYNC_UPDATE_TO_LIST();
       // const post: Post = data.data;
       // notify success
       console.log('update post success');

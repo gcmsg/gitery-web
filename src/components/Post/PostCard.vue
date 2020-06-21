@@ -10,7 +10,6 @@
         <div class="post-info">
           <h4>{{ post.author.nickname }}</h4>
           <h6>{{ updatedTime }}</h6>
-          <h6>{{ updatedDate }}</h6>
         </div>
       </div>
     </el-card>
@@ -37,7 +36,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import moment from 'moment';
+import { formatUnixTimestamp } from '@/utils/format';
 import { Post } from '@/prototypes/post';
 
 @Component
@@ -49,9 +48,7 @@ export default class PostCard extends Vue {
   private updatedTime = '';
 
   private created() {
-    const updatedAt = moment.unix(this.post.updatedAt);
-    this.updatedDate = updatedAt.format('dddd, MMMM Do YYYY');
-    this.updatedTime = updatedAt.format('h:mm:ss a');
+    this.updatedTime = formatUnixTimestamp(this.post.updatedAt);
   }
 }
 </script>

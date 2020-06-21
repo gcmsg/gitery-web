@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <div class="breadcrumb">
+      <div class="breadcrumb-wrapper">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
           <el-breadcrumb-item>{{post.title}}</el-breadcrumb-item>
@@ -16,6 +16,7 @@
         <div class="post-section">
           <PostEditor
             :editable="editable"
+            :loading="isLoading"
             :title="post.title"
             :content="post.content"
             :onTitleChanged="onPostTitleChanged"
@@ -30,9 +31,11 @@
       >
         <div class="side-bar">
           <div>
-            <h3>Author: {{post.author.nickname || 'Anonymous'}}</h3>
-            <p>Created At: {{post.createdAt}}</p>
-            <p>Updated At: {{post.updatedAt}}</p>
+            <h4>Author: {{post.author.nickname || 'Anonymous'}}</h4>
+            <b>Created At:</b>
+            <p v-text="createdTime"></p>
+            <b>Updated At:</b>
+            <p v-text="updatedTime"></p>
           </div>
           <el-divider></el-divider>
           <el-button
@@ -50,9 +53,6 @@
 </template>
 
 <style lang="scss" scoped>
-.breadcrumb {
-  padding: 8px 15px;
-}
 .post-section {
   padding-right: 15px;
   border-right: 1px solid #dcdfe6;
@@ -67,6 +67,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
 import PostEditor from '@/components/Post/PostEditor.vue';
+import { formatUnixTimestamp } from '@/utils/format';
 
 @Component({
   name: 'post-view',
@@ -79,6 +80,18 @@ export default class extends Vue {
 
   private get post() {
     return PostModule.currentPost;
+  }
+
+  private get isLoading() {
+    return !PostModule.currentPost.content;
+  }
+
+  private get createdTime() {
+    return formatUnixTimestamp(PostModule.currentPost.createdAt);
+  }
+
+  private get updatedTime() {
+    return formatUnixTimestamp(PostModule.currentPost.updatedAt);
   }
 
   private get allowEditing() {

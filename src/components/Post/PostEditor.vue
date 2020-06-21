@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title">
+    <div class="title-wrapper">
       <el-input
         v-if="editable"
         v-model="draftTitle"
@@ -12,8 +12,9 @@
       ></h1>
     </div>
     <div
-      :class="{ content: true, editing: editable }"
-      v-loading="isContentLoading"
+      :class="{ 'editor-wrapper': true, editing: editable }"
+      @click="requestFocus"
+      v-loading="loading"
     >
       <editor-menu-bar
         v-if="editable"
@@ -66,26 +67,31 @@
         </div>
       </editor-menu-bar>
 
-      <editor-content :editor="editor" />
+      <div class="input-wrapper">
+        <editor-content :editor="editor" />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
-.title {
+.title-wrapper {
   height: 64px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
 }
-.content {
+.editor-wrapper {
   padding: 0 15px 30px;
   min-height: 30vh;
   &.editing {
     padding: 15px 14px 30px;
     border: 1px solid #dcdfe6;
     border-radius: 5px;
+  }
+  .input-wrapper {
+    padding-top: 15px;
   }
 }
 </style>
@@ -115,17 +121,15 @@ import {
 export default class extends Vue {
   @Prop({ default: false }) editable;
 
-  @Prop({ default: '' }) title;
+  @Prop({ default: false }) loading;
 
-  @Prop({ default: '' }) content;
+  @Prop({ required: true }) title;
+
+  @Prop({ required: true }) content;
 
   @Prop({ required: false }) onTitleChanged;
 
   @Prop({ required: false }) onContentChanged;
-
-  get isContentLoading() {
-    return !this.content;
-  }
 
   get draftTitle() {
     return this.title;
@@ -138,9 +142,8 @@ export default class extends Vue {
   editor;
 
   created() {
-    this.draftTitle = this.title;
     this.editor = new Editor({
-      editable: false,
+      editable: this.editable,
       extensions: [
         new HardBreak(),
         new Heading({ levels: [1, 2, 3] }),
@@ -160,6 +163,12 @@ export default class extends Vue {
 
   beforeDestroy() {
     this.editor.destroy();
+  }
+
+  requestFocus() {
+    if (this.editable) {
+      this.editor.focus();
+    }
   }
 
   @Watch('editable')
