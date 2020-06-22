@@ -1,5 +1,6 @@
 ###### build locally and deploy executable file to server ########
 FROM nginx:stable-alpine
+RUN apk --no-cache add ca-certificates
 COPY ./dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

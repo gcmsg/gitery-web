@@ -28,4 +28,4 @@ deployment/*
 !deploy.sh
 
 # Exclude sample files
-!*.example
+!*.sample
