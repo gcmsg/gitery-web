@@ -4,6 +4,7 @@ import HomeRoute from './home';
 import PostRoute from './post';
 import AboutRoute from './about';
 import LoginRoute from './login';
+import ProfileRoute from './profile';
 
 Vue.use(VueRouter);
 
@@ -12,6 +13,7 @@ const routes: Array<RouteConfig> = [
   PostRoute,
   AboutRoute,
   LoginRoute,
+  ProfileRoute,
 ];
 
 const router = new VueRouter({

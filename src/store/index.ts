@@ -5,7 +5,6 @@ import Vuex from 'vuex';
 import { UserState } from './modules/user';
 import { PostState } from './modules/post';
 
-
 Vue.use(Vuex);
 export interface RootState {
   user: UserState;

@@ -9,7 +9,6 @@ import { Login, JwtPayload } from '@/prototypes/auth';
 import { getUser } from '@/api/user';
 import signIn from '@/api/auth';
 
-
 export interface UserState {
   token: string;
   user: User;

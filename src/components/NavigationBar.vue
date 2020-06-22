@@ -19,44 +19,37 @@
     </div>
 
     <div class="user-menu">
-      <el-dropdown v-if="isLoggedIn" @command="onDropdownSelected">
-        <div class="dropdown-trigger">
-          <span class="el-dropdown-link">
-            My
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-        </div>
+      <el-button
+        v-if="isLoggedIn"
+        @click="onComposePressed"
+        type="primary"
+        size="medium"
+      >
+        New Post
+      </el-button>
 
+      <el-dropdown
+        v-if="isLoggedIn"
+        @command="onDropdownSelected"
+      >
+        <div class="dropdown-trigger">
+          My
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="profile">Profile</el-dropdown-item>
           <el-dropdown-item command="logout">Sign Out</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-button v-else @click="onLoginPressed" type="text">Login</el-button>
+      <el-button
+        v-else
+        @click="onLoginPressed"
+        type="primary"
+      >Login</el-button>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { RouteConfig } from 'vue-router';
-
-@Component
-export default class NavigationBar extends Vue {
-  @Prop({ required: true }) routes!: RouteConfig[];
-
-  @Prop({ required: true }) isLoggedIn!: boolean;
-
-  @Prop({ required: true }) onLoginPressed!: Function;
-
-  @Prop({ required: true }) onDropdownSelected!: Function;
-
-  private handleMenuSelect(key: string, keyPath: string) {
-    console.log(key, keyPath, this.$route.path);
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 .header {
@@ -69,9 +62,12 @@ export default class NavigationBar extends Vue {
   .user-menu {
     border-bottom: solid 1px #e6e6e6;
     cursor: pointer;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
     .dropdown-trigger {
       height: 60px;
-      padding: 0 15px 0 15px;
+      padding: 0 25px 0 25px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -79,3 +75,25 @@ export default class NavigationBar extends Vue {
   }
 }
 </style>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { RouteConfig } from 'vue-router';
+
+@Component
+export default class NavigationBar extends Vue {
+  @Prop({ required: true }) routes!: RouteConfig[];
+
+  @Prop({ required: true }) isLoggedIn!: boolean;
+
+  @Prop({ required: true }) onLoginPressed!: () => void;
+
+  @Prop({ required: true }) onDropdownSelected!: () => void;
+
+  @Prop({ required: true }) onComposePressed!: () => void;
+
+  private handleMenuSelect(key: string, keyPath: string) {
+    console.log(key, keyPath, this.$route.path);
+  }
+}
+</script>
