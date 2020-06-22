@@ -25,7 +25,8 @@
     "vuex-module-decorators": "^0.17.0"
   },
   "resolutions": {
-    "prosemirror-model": "1.8.2"
+    "prosemirror-model": "1.9.1",
+    "webpack": "4.43.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
