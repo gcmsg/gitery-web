@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  app:
+    container_name: app_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - VIRTUAL_HOST=example.com
+      - LETSENCRYPT_HOST=example.com
+    networks:
+      - api_server
+    restart: unless-stopped
+
+networks:
+  api_server:
+    external: true

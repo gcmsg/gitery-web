@@ -8,11 +8,11 @@ const route: RouteConfig = {
   children: [
     {
       path: ':id(\\d+)',
-      component: () => import(/* webpackChunkName: "post" */ '@/views/Post/Detail.vue'),
+      component: () => import(/* webpackChunkName: "post-detail" */ '@/views/Post/Detail.vue'),
     },
     {
       path: 'compose',
-      component: () => import(/* webpackChunkName: "post" */ '@/views/Post/Compose.vue'),
+      component: () => import(/* webpackChunkName: "post-compose" */ '@/views/Post/Compose.vue'),
     },
   ],
 };

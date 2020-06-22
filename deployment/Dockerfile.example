@@ -1,0 +1,8 @@
+###### build locally and deploy executable file to server ########
+FROM nginx:latest-alpine
+ARG app_env
+ENV APP_ENV $app_env
+RUN apk --no-cache add ca-certificates
+RUN mkdir /app
+COPY ./dist /app
+COPY nginx.conf /etc/nginx/nginx.conf
