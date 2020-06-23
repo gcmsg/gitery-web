@@ -7,6 +7,6 @@
 # 4. Docker Compose installed on remote machine
 
 yarn build || exit
-ssh gitery@xxx.xxx.xxx.xxx mkdir -p gitery-web || exit
-rsync -chavzP dist gitery@xxx.xxx.xxx.xxx:gitery-web || exit
-rsync -chavzP deployment/ gitery@xxx.xxx.xxx.xxx:gitery-web || exit
+ssh user@xxx.xxx.xxx.xxx mkdir -p gitery-web || exit
+rsync -chavzP dist user@xxx.xxx.xxx.xxx:gitery-web || exit
+rsync -chavzP deployment/ user@xxx.xxx.xxx.xxx:gitery-web || exit
