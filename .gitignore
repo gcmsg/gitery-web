@@ -21,3 +21,11 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# deployment
+build.sh
+deployment/*
+!deploy.sh
+
+# Exclude sample files
+!*.sample
