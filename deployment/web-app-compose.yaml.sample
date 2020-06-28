@@ -1,11 +1,13 @@
-version: "3"
+version: "3.8"
 
 services:
   app:
-    container_name: app_container
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
+    environment:
+      - VIRTUAL_HOST=example.com
+      - LETSENCRYPT_HOST=example.com
+    # ports:
+    #   - "80:80"
     restart: unless-stopped
