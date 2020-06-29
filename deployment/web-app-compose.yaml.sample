@@ -8,6 +8,9 @@ services:
     environment:
       - VIRTUAL_HOST=example.com
       - LETSENCRYPT_HOST=example.com
-    # ports:
-    #   - "80:80"
     restart: unless-stopped
+
+networks:
+  app-network:
+    external:
+      name: nginx-proxy-network
