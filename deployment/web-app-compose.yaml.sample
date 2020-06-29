@@ -5,12 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - "./conf.d/:/etc/nginx/conf.d"
     environment:
       - VIRTUAL_HOST=example.com
       - LETSENCRYPT_HOST=example.com
     restart: unless-stopped
-
-networks:
-  app-network:
-    external:
-      name: nginx-proxy-network
