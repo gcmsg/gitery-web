@@ -14,12 +14,16 @@
         :sm="18"
       >
         <div class="post-section">
-          <PostEditor
-            :editable="true"
-            :title="post.title"
-            :content="post.content"
-            :onTitleChanged="onPostTitleChanged"
-            :onContentChanged="onPostContentChanged"
+          <div class="title-wrapper">
+            <el-input
+              v-model="draftTitle"
+              placeholder="Post title"
+            ></el-input>
+          </div>
+
+          <Tinymce
+            :value="draftPost.content"
+            @input="onPostContentChanged"
           />
         </div>
       </el-col>
@@ -45,8 +49,15 @@
 
 <style lang="scss" scoped>
 .post-section {
-  padding-right: 15px;
+  padding: 0 15px;
   border-right: 1px solid #dcdfe6;
+  .title-wrapper {
+    height: 64px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+  }
 }
 .side-bar {
   padding: 15px;
@@ -56,27 +67,31 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
-import PostEditor from '@/components/Post/PostEditor.vue';
+import Tinymce from '@/components/Tinymce/index.vue';
 
 @Component({
   name: 'post-compose',
   components: {
-    PostEditor,
+    Tinymce,
   },
 })
 export default class extends Vue {
   private isLoading = false;
 
-  private get post() {
+  private get draftPost() {
     return PostModule.draftPost;
+  }
+
+  get draftTitle() {
+    return PostModule.draftPost.title;
+  }
+
+  set draftTitle(value: string) {
+    PostModule.updateDraftPostContent(value);
   }
 
   private created() {
     PostModule.initDraftPost();
-  }
-
-  private onPostTitleChanged(title: string) {
-    PostModule.updateDraftPostTitle(title);
   }
 
   private onPostContentChanged(content: string) {

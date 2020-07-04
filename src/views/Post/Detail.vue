@@ -14,14 +14,29 @@
         :sm="18"
       >
         <div class="post-section">
-          <PostEditor
-            :editable="editable"
-            :loading="isContentLoading"
-            :title="post.title"
-            :content="post.content"
-            :onTitleChanged="onPostTitleChanged"
-            :onContentChanged="onPostContentChanged"
-          />
+          <div class="title-wrapper">
+            <el-input
+              v-if="editable"
+              v-model="draftTitle"
+              placeholder="Post title"
+            ></el-input>
+            <h1
+              v-else
+              v-text="post.title"
+            ></h1>
+          </div>
+
+          <div v-loading="isContentLoading">
+            <Tinymce
+              v-if="editable"
+              :value="draftContent"
+              @input="onPostContentChanged"
+            />
+            <div
+              v-else
+              v-html="post.content"
+            />
+          </div>
         </div>
       </el-col>
 
@@ -71,8 +86,15 @@
 
 <style lang="scss" scoped>
 .post-section {
-  padding-right: 15px;
+  padding: 0 15px;
   border-right: 1px solid #dcdfe6;
+  .title-wrapper {
+    height: 64px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+  }
 }
 .side-bar {
   padding: 15px;
@@ -83,13 +105,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
-import PostEditor from '@/components/Post/PostEditor.vue';
+import Tinymce from '@/components/Tinymce/index.vue';
 import { formatUnixTimestamp } from '@/utils/format';
 
 @Component({
   name: 'post-view',
   components: {
-    PostEditor,
+    Tinymce,
   },
 })
 export default class extends Vue {
@@ -99,6 +121,18 @@ export default class extends Vue {
 
   private get post() {
     return PostModule.currentPost;
+  }
+
+  get draftTitle() {
+    return PostModule.draftPost.title;
+  }
+
+  set draftTitle(value: string) {
+    PostModule.updateDraftPostContent(value);
+  }
+
+  get draftContent() {
+    return PostModule.draftPost.content;
   }
 
   private get isContentLoading() {
@@ -135,10 +169,6 @@ export default class extends Vue {
       PostModule.syncPostUpdate();
     }
     this.editable = !this.editable;
-  }
-
-  private onPostTitleChanged(title: string) {
-    PostModule.updateDraftPostTitle(title);
   }
 
   private onPostContentChanged(content: string) {

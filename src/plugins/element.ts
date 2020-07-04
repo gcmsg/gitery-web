@@ -10,6 +10,8 @@ import {
   Loading,
   Divider,
   Popover, Popconfirm,
+  Dialog,
+  Upload,
 } from 'element-ui';
 import locale from 'element-ui/lib/locale';
 import lang from 'element-ui/lib/locale/lang/en';
@@ -28,4 +30,6 @@ export default [
   Loading,
   Divider,
   Popover, Popconfirm,
+  Dialog,
+  Upload,
 ];
