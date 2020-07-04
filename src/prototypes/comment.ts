@@ -6,7 +6,9 @@ export interface Comment {
   content: string;
   postID: number;
   userID: number;
+  parentID: number;
   createdAt: number;
   updatedAt: number;
   author?: User;
+  comments?: Comment[];
 }
