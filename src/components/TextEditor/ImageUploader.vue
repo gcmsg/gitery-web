@@ -42,6 +42,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 export interface UploadObject {
@@ -53,7 +54,7 @@ export interface UploadObject {
 }
 
 @Component({
-  name: 'EditorImageUpload',
+  name: 'ImageUploader',
 })
 export default class extends Vue {
   @Prop({ required: true }) private color!: string
@@ -71,7 +72,8 @@ export default class extends Vue {
   private handleSubmit() {
     const arr = Object.keys(this.listObj).map((v) => this.listObj[v]);
     if (!this.checkAllSuccess()) {
-      this.$message('Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!');
+      this.$message(`Please wait for all images to be uploaded successfully. 
+      If there is a network problem, please refresh the page and upload again!`);
       return;
     }
     this.$emit('successCBK', arr);

@@ -21,7 +21,7 @@
             ></el-input>
           </div>
 
-          <Tinymce
+          <TextEditor
             :value="draftPost.content"
             @input="onPostContentChanged"
           />
@@ -51,6 +51,7 @@
 .post-section {
   padding: 0 15px;
   border-right: 1px solid #dcdfe6;
+  min-height: 60vh;
   .title-wrapper {
     height: 64px;
     display: flex;
@@ -67,12 +68,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
-import Tinymce from '@/components/Tinymce/index.vue';
+import TextEditor from '@/components/TextEditor/Editor.vue';
 
 @Component({
   name: 'post-compose',
   components: {
-    Tinymce,
+    TextEditor,
   },
 })
 export default class extends Vue {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Import plugins that you want to use
 // Detail plugins list see: https://www.tinymce.com/docs/plugins/
 // Custom builds see: https://www.tinymce.com/download/custom-builds/

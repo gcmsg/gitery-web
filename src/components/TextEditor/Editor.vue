@@ -4,12 +4,13 @@
     class="tinymce-container"
   >
     <tinymce-editor
+      api-key="no-api-key"
       :id="id"
       v-model="tinymceContent"
       :init="initOptions"
     />
     <div class="editor-custom-btn-container">
-      <editor-image-upload
+      <image-uploader
         color="#1890ff"
         class="editor-upload-btn"
         @successCBK="imageSuccessCBK"
@@ -50,12 +51,17 @@ textarea {
 </style>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/camelcase */
 // Docs: https://armour.github.io/vue-typescript-admin-docs/features/components/rich-editor.html#tinymce
 import 'tinymce/tinymce';
-import 'tinymce/themes/silver'; // Import themes
+// Default icons are required for TinyMCE 5.3 or above
+import 'tinymce/icons/default';
+// Import themes
+import 'tinymce/themes/silver';
 import 'tinymce/themes/mobile';
-import 'tinymce/plugins/advlist'; // Any plugins you want to use has to be imported
+// Any plugins you want to use has to be imported
+import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/autolink';
 import 'tinymce/plugins/autosave';
@@ -91,15 +97,15 @@ import TinymceEditor from '@tinymce/tinymce-vue'; // TinyMCE vue wrapper
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
-import EditorImageUpload, { UploadObject } from './components/EditorImage.vue';
+import ImageUploader, { UploadObject } from './ImageUploader.vue';
 import { plugins, toolbar } from './config';
 
 const defaultId = () => `vue-tinymce-${+new Date()}${(Math.random() * 1000).toFixed(0)}`;
 
 @Component({
-  name: 'Tinymce',
+  name: 'TextEditor',
   components: {
-    EditorImageUpload,
+    ImageUploader,
     TinymceEditor,
   },
 })
@@ -140,7 +146,6 @@ export default class extends Vue {
     return {
       selector: `#${this.id}`,
       min_height: 360,
-      body_class: 'panel-body',
       object_resizing: false,
       toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
       menubar: this.menubar,

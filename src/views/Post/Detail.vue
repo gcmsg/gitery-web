@@ -27,7 +27,7 @@
           </div>
 
           <div v-loading="isContentLoading">
-            <Tinymce
+            <TextEditor
               v-if="editable"
               :value="draftContent"
               @input="onPostContentChanged"
@@ -88,6 +88,7 @@
 .post-section {
   padding: 0 15px;
   border-right: 1px solid #dcdfe6;
+  min-height: 60vh;
   .title-wrapper {
     height: 64px;
     display: flex;
@@ -105,13 +106,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
-import Tinymce from '@/components/Tinymce/index.vue';
+import TextEditor from '@/components/TextEditor/Editor.vue';
 import { formatUnixTimestamp } from '@/utils/format';
 
 @Component({
   name: 'post-view',
   components: {
-    Tinymce,
+    TextEditor,
   },
 })
 export default class extends Vue {
