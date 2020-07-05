@@ -88,7 +88,7 @@ export default class extends Vue {
   }
 
   set draftTitle(value: string) {
-    PostModule.updateDraftPostContent(value);
+    PostModule.updateDraftPostTitle(value);
   }
 
   private created() {
