@@ -27,11 +27,7 @@ export default class extends Vue {
   }
 
   private created() {
-    this.getPosts();
-  }
-
-  private async getPosts() {
-    await PostModule.GetLatestPosts();
+    PostModule.GetLatestPosts();
   }
 
   private onPostCardPressed(post: Post) {

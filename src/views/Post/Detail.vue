@@ -26,7 +26,10 @@
             ></h1>
           </div>
 
-          <div v-loading="isContentLoading">
+          <div
+            class="content-wrapper"
+            v-loading="isContentLoading"
+          >
             <TextEditor
               v-if="editable"
               :value="draftContent"
@@ -35,6 +38,14 @@
             <div
               v-else
               v-html="post.content"
+            />
+          </div>
+
+          <div class="comment-wrapper">
+            <CommentItem
+              v-for="comment in post.comments"
+              :key="comment.id"
+              :comment="comment"
             />
           </div>
         </div>
@@ -90,11 +101,17 @@
   border-right: 1px solid #dcdfe6;
   min-height: 60vh;
   .title-wrapper {
-    height: 64px;
+    padding: 15px 0;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
+  }
+  .content-wrapper {
+    padding: 15px 0;
+  }
+  .comment-wrapper {
+    padding: 15px 0;
   }
 }
 .side-bar {
@@ -107,12 +124,14 @@ import { Component, Vue } from 'vue-property-decorator';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
 import TextEditor from '@/components/TextEditor/Editor.vue';
+import CommentItem from '@/components/Comment/CommentItem.vue';
 import { formatUnixTimestamp } from '@/utils/format';
 
 @Component({
   name: 'post-view',
   components: {
     TextEditor,
+    CommentItem,
   },
 })
 export default class extends Vue {
