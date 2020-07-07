@@ -53,7 +53,7 @@
   border-right: 1px solid #dcdfe6;
   min-height: 60vh;
   .title-wrapper {
-    height: 64px;
+    padding: 8px 0;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;

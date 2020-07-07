@@ -4,7 +4,7 @@
       shadow="hover"
       :key="comment.id"
     >
-      <div><b>{{comment.author.nickname}}</b> <span v-if="replyTo">replied to <b>{{replyTo}}</b></span></div>
+      <div><b>{{comment.author.nickname}}</b> <span v-if="replyTo">replied to <b>{{replyTo}}</b></span>:</div>
       <br />
       <div>{{comment.content}}</div>
       <CommentItem
@@ -31,8 +31,10 @@ import { Comment } from '@/prototypes/comment';
   name: 'CommentItem',
 })
 export default class CommentItem extends Vue {
-  @Prop() comment!: Comment;
+  @Prop({ required: true }) comment!: Comment;
 
   @Prop() replyTo!: string;
+
+  @Prop({ default: false }) editable!: boolean;
 }
 </script>

@@ -46,6 +46,7 @@
               v-for="comment in post.comments"
               :key="comment.id"
               :comment="comment"
+              :editable="userID == comment.author.id"
             />
           </div>
         </div>
@@ -101,14 +102,14 @@
   border-right: 1px solid #dcdfe6;
   min-height: 60vh;
   .title-wrapper {
-    padding: 15px 0;
+    padding: 8px 0;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
   }
   .content-wrapper {
-    padding: 15px 0;
+    padding: 8px 0;
   }
   .comment-wrapper {
     padding: 15px 0;
@@ -143,15 +144,15 @@ export default class extends Vue {
     return PostModule.currentPost;
   }
 
-  get draftTitle() {
+  private get draftTitle() {
     return PostModule.draftPost.title;
   }
 
-  set draftTitle(value: string) {
+  private set draftTitle(value: string) {
     PostModule.updateDraftPostTitle(value);
   }
 
-  get draftContent() {
+  private get draftContent() {
     return PostModule.draftPost.content;
   }
 
@@ -171,6 +172,10 @@ export default class extends Vue {
       return formatUnixTimestamp(this.post.updatedAt);
     }
     return '';
+  }
+
+  private get userID() {
+    return UserModule.user.id;
   }
 
   private get allowEditing() {

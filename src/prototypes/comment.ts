@@ -6,9 +6,10 @@ export interface Comment {
   content: string;
   postID: number;
   userID: number;
-  parentID: number;
+  parentID?: number;
   createdAt: number;
   updatedAt: number;
+  isDeleted: boolean;
   author?: User;
   comments?: Comment[];
 }
