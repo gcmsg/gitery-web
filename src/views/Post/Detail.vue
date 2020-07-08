@@ -43,10 +43,11 @@
 
           <div class="comment-wrapper">
             <CommentItem
-              v-for="comment in post.comments"
+              v-for="(comment, index) in post.comments"
               :key="comment.id"
               :comment="comment"
               :userID="userID"
+              :treePath="[index]"
             />
           </div>
         </div>

@@ -23,13 +23,27 @@
         </div>
       </div>
 
-      <div class="content">{{comment.content}}</div>
+      <div class="content">
+        <el-input
+          v-if="editable"
+          type="textarea"
+          autosize
+          placeholder="请输入内容"
+          v-model="content"
+        >
+        </el-input>
+        <div v-else>
+          {{content}}
+        </div>
+      </div>
+
       <CommentItem
-        v-for="childComment in comment.comments"
+        v-for="(childComment, index) in comment.comments"
         :key="childComment.id"
         :comment="childComment"
         :replyTo="comment.author.nickname"
         :userID="userID"
+        :treePath="[...treePath, index]"
       />
     </el-card>
   </div>
@@ -64,12 +78,21 @@ export default class CommentItem extends Vue {
 
   @Prop() replyTo!: string;
 
+  @Prop() treePath!: number[]
+
   private editable = false;
 
   private get isAuthor() {
-    console.log(this.comment, this.userID);
-
     return this.userID === this.comment.author?.id;
+  }
+
+  private get content() {
+    return this.comment.content;
+  }
+
+  private set content(value: string) {
+    console.log(this.treePath);
+    // do comment set
   }
 
   private onEditButtonPressed() {
