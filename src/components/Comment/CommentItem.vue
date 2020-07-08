@@ -4,14 +4,32 @@
       shadow="hover"
       :key="comment.id"
     >
-      <div><b>{{comment.author.nickname}}</b> <span v-if="replyTo">replied to <b>{{replyTo}}</b></span>:</div>
-      <br />
-      <div>{{comment.content}}</div>
+      <div class="header">
+        <div><b>{{comment.author.nickname}}</b> <span v-if="replyTo">replied to <b>{{replyTo}}</b></span>:</div>
+        <div v-if="isAuthor">
+          <el-button
+            v-if="editable"
+            type="primary"
+            size="mini"
+            @click="onDoneButtonPressed"
+          >Done</el-button>
+          <el-button
+            v-else
+            type="primary"
+            size="mini"
+            plain
+            @click="onEditButtonPressed"
+          >Edit</el-button>
+        </div>
+      </div>
+
+      <div class="content">{{comment.content}}</div>
       <CommentItem
         v-for="childComment in comment.comments"
         :key="childComment.id"
         :comment="childComment"
         :replyTo="comment.author.nickname"
+        :userID="userID"
       />
     </el-card>
   </div>
@@ -20,6 +38,15 @@
 <style lang="scss" scoped>
 .wrapper {
   margin: 15px 0;
+  .header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .content {
+    padding-top: 15px;
+  }
 }
 </style>
 
@@ -33,8 +60,24 @@ import { Comment } from '@/prototypes/comment';
 export default class CommentItem extends Vue {
   @Prop({ required: true }) comment!: Comment;
 
+  @Prop() userID!: number;
+
   @Prop() replyTo!: string;
 
-  @Prop({ default: false }) editable!: boolean;
+  private editable = false;
+
+  private get isAuthor() {
+    console.log(this.comment, this.userID);
+
+    return this.userID === this.comment.author?.id;
+  }
+
+  private onEditButtonPressed() {
+    this.editable = true;
+  }
+
+  private onDoneButtonPressed() {
+    this.editable = false;
+  }
 }
 </script>

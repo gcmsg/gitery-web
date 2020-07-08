@@ -46,7 +46,7 @@
               v-for="comment in post.comments"
               :key="comment.id"
               :comment="comment"
-              :editable="userID == comment.author.id"
+              :userID="userID"
             />
           </div>
         </div>
@@ -65,7 +65,7 @@
             <p v-text="updatedTime"></p>
           </div>
           <el-divider></el-divider>
-          <div v-if="allowEditing">
+          <div v-if="isAuthor">
             <el-button
               type="primary"
               size="medium"
@@ -156,6 +156,10 @@ export default class extends Vue {
     return PostModule.draftPost.content;
   }
 
+  private onPostContentChanged(content: string) {
+    PostModule.updateDraftPostContent(content);
+  }
+
   private get isContentLoading() {
     return !PostModule.currentPost.content;
   }
@@ -178,7 +182,7 @@ export default class extends Vue {
     return UserModule.user.id;
   }
 
-  private get allowEditing() {
+  private get isAuthor() {
     return UserModule.isLoggedIn && PostModule.currentPost.userID === UserModule.user.id;
   }
 
@@ -194,10 +198,6 @@ export default class extends Vue {
       PostModule.syncPostUpdate();
     }
     this.editable = !this.editable;
-  }
-
-  private onPostContentChanged(content: string) {
-    PostModule.updateDraftPostContent(content);
   }
 
   private async onDeleteButtonPressed() {
