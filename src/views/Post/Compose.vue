@@ -16,7 +16,7 @@
         <div class="post-section">
           <div class="title-wrapper">
             <el-input
-              v-model="draftTitle"
+              v-model="draftPost.title"
               placeholder="Post title"
             ></el-input>
           </div>
@@ -67,6 +67,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Post } from '@/prototypes/post';
 import PostModule from '@/store/modules/post';
 import TextEditor from '@/components/TextEditor/Editor.vue';
 
@@ -79,29 +80,18 @@ import TextEditor from '@/components/TextEditor/Editor.vue';
 export default class extends Vue {
   private isLoading = false;
 
-  private get draftPost() {
-    return PostModule.draftPost;
-  }
-
-  get draftTitle() {
-    return PostModule.draftPost.title;
-  }
-
-  set draftTitle(value: string) {
-    PostModule.updateDraftPostTitle(value);
-  }
-
-  private created() {
-    PostModule.initDraftPost();
-  }
+  private draftPost = {
+    title: '',
+    content: '',
+  } as Post;
 
   private onPostContentChanged(content: string) {
-    PostModule.updateDraftPostContent(content);
+    this.draftPost.content = content;
   }
 
   private async onPublishButtonPressed() {
     this.isLoading = true;
-    await PostModule.syncPostCreate();
+    await PostModule.syncPostCreate(this.draftPost);
     this.$router.replace(`/post/${PostModule.currentPost.id}`);
   }
 }

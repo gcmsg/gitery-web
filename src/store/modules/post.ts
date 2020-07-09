@@ -14,7 +14,6 @@ export interface PostState {
   posts: Post[];
   isLoading: boolean;
   currentPost: Post;
-  draftPost: Post;
 }
 
 @Module({ dynamic: true, store, name: 'post' })
@@ -30,11 +29,6 @@ class PostModule extends VuexModule implements PostState {
     content: '',
   } as Post;
 
-  public draftPost = {
-    title: '',
-    content: '',
-  } as Post;
-
   @Mutation
   private SET_LOADING(isLoading: boolean) {
     this.isLoading = isLoading;
@@ -46,17 +40,8 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private INIT_DRAFT_POST() {
-    this.draftPost = {
-      title: '',
-      content: '',
-    } as Post;
-  }
-
-  @Mutation
   private SET_CURRENT_POST(post: Post) {
     this.currentPost = post;
-    this.draftPost = post;
   }
 
   @Mutation
@@ -77,31 +62,37 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private SAVE_POST() {
-    this.currentPost = this.draftPost;
-  }
-
-  @Mutation
-  private SET_DRAFT_POST_TITLE(title: string) {
-    if (this.draftPost) {
-      this.draftPost.title = title;
-    }
-  }
-
-  @Mutation
-  private SET_DRAFT_POST_CONTENT(content: string) {
-    if (this.draftPost) {
-      this.draftPost.content = content;
-    }
-  }
-
-  @Mutation
   private ADD_COMMENT_FOR_CURRENT_POST(comment: Comment) {
     if (this.currentPost) {
       if (this.currentPost.comments) {
         this.currentPost.comments.push(comment);
       } else {
         this.currentPost.comments = [comment];
+      }
+    }
+  }
+
+  @Mutation
+  private EDIT_COMMENT(treePath: number[], content: string) {
+    const { comments } = this.currentPost;
+    function traverse(commentList: Comment[], path: number[]): Comment | undefined {
+      const idx = path[0];
+      if (idx < commentList.length) {
+        const comment = commentList[idx];
+        const nextPath = path.slice(1);
+        if (nextPath.length === 0) {
+          return comment;
+        }
+        if (comment.comments?.length) {
+          return traverse(comment.comments, nextPath);
+        }
+      }
+      return undefined;
+    }
+    if (comments) {
+      const comment = traverse(comments, treePath);
+      if (comment) {
+        comment.content = content;
       }
     }
   }
@@ -137,23 +128,8 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public initDraftPost() {
-    this.INIT_DRAFT_POST();
-  }
-
-  @Action
-  public updateDraftPostTitle(title: string) {
-    this.SET_DRAFT_POST_TITLE(title);
-  }
-
-  @Action
-  public updateDraftPostContent(Content: string) {
-    this.SET_DRAFT_POST_CONTENT(Content);
-  }
-
-  @Action
-  public async syncPostCreate() {
-    const { data } = await createPost(this.draftPost);
+  public async syncPostCreate(draft: Post) {
+    const { data } = await createPost(draft);
     if (data.ok) {
       const post: Post = data.data;
       this.SET_CURRENT_POST(post);
@@ -164,14 +140,12 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public async syncPostUpdate() {
-    const { data } = await updatePost(this.draftPost);
+  public async syncPostUpdate(draft: Post) {
+    const { data } = await updatePost(draft);
     if (data.ok) {
-      this.SAVE_POST();
+      const post: Post = data.data;
+      this.SET_CURRENT_POST(post);
       this.SYNC_UPDATE_TO_LIST();
-      // const post: Post = data.data;
-      // notify success
-      console.log('update post success');
     } else {
       // handle error
     }
@@ -183,6 +157,11 @@ class PostModule extends VuexModule implements PostState {
     if (data.ok) {
       this.DELETE_POST_FROM_LIST();
     }
+  }
+
+  @Action
+  public updateComment(treePath: number[], content: string) {
+    this.EDIT_COMMENT(treePath, content);
   }
 }
 

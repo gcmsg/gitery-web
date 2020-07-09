@@ -17,7 +17,7 @@
           <div class="title-wrapper">
             <el-input
               v-if="editable"
-              v-model="draftTitle"
+              v-model="draftPost.title"
               placeholder="Post title"
             ></el-input>
             <h1
@@ -32,7 +32,7 @@
           >
             <TextEditor
               v-if="editable"
-              :value="draftContent"
+              :value="draftPost.content"
               @input="onPostContentChanged"
             />
             <div
@@ -123,6 +123,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Post } from '@/prototypes/post';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
 import TextEditor from '@/components/TextEditor/Editor.vue';
@@ -141,24 +142,17 @@ export default class extends Vue {
 
   private editable = false;
 
+  private draftPost = {
+    title: '',
+    content: '',
+  } as Post;
+
   private get post() {
     return PostModule.currentPost;
   }
 
-  private get draftTitle() {
-    return PostModule.draftPost.title;
-  }
-
-  private set draftTitle(value: string) {
-    PostModule.updateDraftPostTitle(value);
-  }
-
-  private get draftContent() {
-    return PostModule.draftPost.content;
-  }
-
   private onPostContentChanged(content: string) {
-    PostModule.updateDraftPostContent(content);
+    this.draftPost.content = content;
   }
 
   private get isContentLoading() {
@@ -191,12 +185,17 @@ export default class extends Vue {
     const postID = Number.parseInt(this.$route.params.id, 10);
     if (!Number.isNaN(postID)) {
       await PostModule.fetchPostDetail(postID);
+      this.draftPost.id = postID;
+      this.draftPost.title = this.post.title;
+      this.draftPost.content = this.post.content;
     }
   }
 
-  private onEditButtonPressed() {
+  private async onEditButtonPressed() {
     if (this.editable) {
-      PostModule.syncPostUpdate();
+      this.isActionLoading = true;
+      await PostModule.syncPostUpdate(this.draftPost);
+      this.isActionLoading = false;
     }
     this.editable = !this.editable;
   }
