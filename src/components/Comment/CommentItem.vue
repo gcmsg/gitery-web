@@ -38,12 +38,11 @@
       </div>
 
       <CommentItem
-        v-for="(childComment, index) in comment.comments"
+        v-for="childComment in comment.comments"
         :key="childComment.id"
         :comment="childComment"
         :replyTo="comment.author.nickname"
         :userID="userID"
-        :treePath="[...treePath, index]"
         @update="onUpdate"
       />
     </el-card>
@@ -79,8 +78,6 @@ export default class CommentItem extends Vue {
 
   @Prop() replyTo!: string;
 
-  @Prop() treePath!: number[];
-
   private editable = false;
 
   private content = '';
@@ -98,12 +95,13 @@ export default class CommentItem extends Vue {
   }
 
   private onDoneButtonPressed() {
+    this.content = this.content.trim();
+    this.$emit('update', this.comment, this.content);
     this.editable = false;
-    this.$emit('update', this.comment, this.content, this.treePath);
   }
 
-  private onUpdate(comment: Comment, content: string, treePath: number[]) {
-    this.$emit('update', comment, content, treePath);
+  private onUpdate(comment: Comment, content: string) {
+    this.$emit('update', comment, content);
   }
 }
 </script>

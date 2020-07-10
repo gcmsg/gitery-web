@@ -208,8 +208,8 @@ export default class extends Vue {
     this.$router.replace('/');
   }
 
-  private async onCommentUpdate(comment: Comment, content: string, treePath: number[]) {
-    await PostModule.updateComment({ comment, content, treePath });
+  private async onCommentUpdate(comment: Comment, content: string) {
+    await PostModule.updateComment({ comment, content });
   }
 }
 </script>

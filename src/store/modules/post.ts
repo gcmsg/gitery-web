@@ -74,29 +74,10 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private EDIT_COMMENT(commentUpdate: { comment: Comment; treePath: number[] }) {
-    const { comments } = this.currentPost;
-    function traverse(cList: Comment[], path: number[]): Comment | undefined {
-      const idx = path[0];
-      if (idx < cList.length) {
-        const c = cList[idx];
-        const nextPath = path.slice(1);
-        if (nextPath.length === 0) {
-          return c;
-        }
-        if (c.comments?.length) {
-          return traverse(c.comments, nextPath);
-        }
-      }
-      return undefined;
-    }
-    if (comments) {
-      const c = traverse(comments, commentUpdate.treePath);
-      if (c) {
-        c.content = commentUpdate.comment.content;
-        c.updatedAt = commentUpdate.comment.updatedAt;
-      }
-    }
+  private EDIT_COMMENT(updateMatching: { comment: Comment; updatedComment: Comment }) {
+    const { comment, updatedComment } = updateMatching;
+    comment.content = updatedComment.content;
+    comment.updatedAt = updatedComment.updatedAt;
   }
 
   @Action
@@ -162,15 +143,15 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public async updateComment(commentUpdate: { comment: Comment; content: string; treePath: number[] }) {
+  public async updateComment(args: { comment: Comment; content: string }) {
     const dataToUpdate = {
-      id: commentUpdate.comment.id,
-      content: commentUpdate.content,
+      id: args.comment.id,
+      content: args.content,
     } as Comment;
     const { data } = await updateComment(dataToUpdate);
     if (data.ok) {
-      const comment: Comment = data.data;
-      this.EDIT_COMMENT({ comment, treePath: commentUpdate.treePath });
+      const updatedComment: Comment = data.data;
+      this.EDIT_COMMENT({ comment: args.comment, updatedComment });
     }
   }
 }
