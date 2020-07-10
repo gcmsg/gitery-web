@@ -48,6 +48,7 @@
               :comment="comment"
               :userID="userID"
               :treePath="[index]"
+              @update="onCommentUpdate"
             />
           </div>
         </div>
@@ -204,6 +205,10 @@ export default class extends Vue {
     this.isActionLoading = true;
     await PostModule.syncPostDelete();
     this.$router.replace('/');
+  }
+
+  private async onCommentUpdate(content: string, treePath: number[]) {
+    await PostModule.updateComment({ content, treePath });
   }
 }
 </script>

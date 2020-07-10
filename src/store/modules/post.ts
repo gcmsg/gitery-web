@@ -73,7 +73,7 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private EDIT_COMMENT(treePath: number[], content: string) {
+  private EDIT_COMMENT(commentUpdate: { content: string; treePath: number[] }) {
     const { comments } = this.currentPost;
     function traverse(commentList: Comment[], path: number[]): Comment | undefined {
       const idx = path[0];
@@ -90,9 +90,9 @@ class PostModule extends VuexModule implements PostState {
       return undefined;
     }
     if (comments) {
-      const comment = traverse(comments, treePath);
+      const comment = traverse(comments, commentUpdate.treePath);
       if (comment) {
-        comment.content = content;
+        comment.content = commentUpdate.content;
       }
     }
   }
@@ -160,8 +160,9 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public updateComment(treePath: number[], content: string) {
-    this.EDIT_COMMENT(treePath, content);
+  public async updateComment(commentUpdate: { content: string; treePath: number[] }) {
+    this.EDIT_COMMENT(commentUpdate);
+    // TODO update comment to server
   }
 }
 

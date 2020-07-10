@@ -44,6 +44,7 @@
         :replyTo="comment.author.nickname"
         :userID="userID"
         :treePath="[...treePath, index]"
+        @update="onUpdate"
       />
     </el-card>
   </div>
@@ -78,21 +79,18 @@ export default class CommentItem extends Vue {
 
   @Prop() replyTo!: string;
 
-  @Prop() treePath!: number[]
+  @Prop() treePath!: number[];
 
   private editable = false;
+
+  private content = '';
 
   private get isAuthor() {
     return this.userID === this.comment.author?.id;
   }
 
-  private get content() {
-    return this.comment.content;
-  }
-
-  private set content(value: string) {
-    console.log(this.treePath);
-    // do comment set
+  private created() {
+    this.content = this.comment.content;
   }
 
   private onEditButtonPressed() {
@@ -101,6 +99,11 @@ export default class CommentItem extends Vue {
 
   private onDoneButtonPressed() {
     this.editable = false;
+    this.$emit('update', this.content, this.treePath);
+  }
+
+  private onUpdate(content: string, treePath: number[]) {
+    this.$emit('update', content, treePath);
   }
 }
 </script>
