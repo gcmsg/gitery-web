@@ -99,11 +99,11 @@ export default class CommentItem extends Vue {
 
   private onDoneButtonPressed() {
     this.editable = false;
-    this.$emit('update', this.content, this.treePath);
+    this.$emit('update', this.comment, this.content, this.treePath);
   }
 
-  private onUpdate(content: string, treePath: number[]) {
-    this.$emit('update', content, treePath);
+  private onUpdate(comment: Comment, content: string, treePath: number[]) {
+    this.$emit('update', comment, content, treePath);
   }
 }
 </script>

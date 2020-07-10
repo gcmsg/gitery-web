@@ -125,6 +125,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Post } from '@/prototypes/post';
+import { Comment } from '@/prototypes/comment';
 import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
 import TextEditor from '@/components/TextEditor/Editor.vue';
@@ -207,8 +208,8 @@ export default class extends Vue {
     this.$router.replace('/');
   }
 
-  private async onCommentUpdate(content: string, treePath: number[]) {
-    await PostModule.updateComment({ content, treePath });
+  private async onCommentUpdate(comment: Comment, content: string, treePath: number[]) {
+    await PostModule.updateComment({ comment, content, treePath });
   }
 }
 </script>

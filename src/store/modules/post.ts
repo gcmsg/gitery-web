@@ -8,6 +8,7 @@ import { Comment } from '@/prototypes/comment';
 import {
   getLatestPosts, getPost, updatePost, createPost, deletePost,
 } from '@/api/post';
+import { updateComment } from '@/api/comment';
 
 export interface PostState {
   tags: string[];
@@ -73,26 +74,27 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private EDIT_COMMENT(commentUpdate: { content: string; treePath: number[] }) {
+  private EDIT_COMMENT(commentUpdate: { comment: Comment; treePath: number[] }) {
     const { comments } = this.currentPost;
-    function traverse(commentList: Comment[], path: number[]): Comment | undefined {
+    function traverse(cList: Comment[], path: number[]): Comment | undefined {
       const idx = path[0];
-      if (idx < commentList.length) {
-        const comment = commentList[idx];
+      if (idx < cList.length) {
+        const c = cList[idx];
         const nextPath = path.slice(1);
         if (nextPath.length === 0) {
-          return comment;
+          return c;
         }
-        if (comment.comments?.length) {
-          return traverse(comment.comments, nextPath);
+        if (c.comments?.length) {
+          return traverse(c.comments, nextPath);
         }
       }
       return undefined;
     }
     if (comments) {
-      const comment = traverse(comments, commentUpdate.treePath);
-      if (comment) {
-        comment.content = commentUpdate.content;
+      const c = traverse(comments, commentUpdate.treePath);
+      if (c) {
+        c.content = commentUpdate.comment.content;
+        c.updatedAt = commentUpdate.comment.updatedAt;
       }
     }
   }
@@ -160,9 +162,16 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public async updateComment(commentUpdate: { content: string; treePath: number[] }) {
-    this.EDIT_COMMENT(commentUpdate);
-    // TODO update comment to server
+  public async updateComment(commentUpdate: { comment: Comment; content: string; treePath: number[] }) {
+    const dataToUpdate = {
+      id: commentUpdate.comment.id,
+      content: commentUpdate.content,
+    } as Comment;
+    const { data } = await updateComment(dataToUpdate);
+    if (data.ok) {
+      const comment: Comment = data.data;
+      this.EDIT_COMMENT({ comment, treePath: commentUpdate.treePath });
+    }
   }
 }
 
