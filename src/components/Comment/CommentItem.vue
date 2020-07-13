@@ -11,15 +11,19 @@
             v-if="editable"
             type="primary"
             size="mini"
+            round
+            icon="el-icon-check"
             @click="onDoneButtonPressed"
-          >Done</el-button>
+          ></el-button>
           <el-button
             v-else
             type="primary"
             size="mini"
             plain
+            round
+            icon="el-icon-edit"
             @click="onEditButtonPressed"
-          >Edit</el-button>
+          ></el-button>
         </div>
       </div>
 
@@ -35,6 +39,23 @@
         <div v-else>
           {{content}}
         </div>
+      </div>
+
+      <div class="actions">
+        <el-button
+          size="mini"
+          type="primary"
+          plain
+          round
+          icon="el-icon-chat-dot-square"
+        ></el-button>
+        <el-button
+          size="mini"
+          type="primary"
+          plain
+          round
+          icon="el-icon-star-off"
+        ></el-button>
       </div>
 
       <CommentItem
@@ -59,7 +80,11 @@
     align-items: center;
   }
   .content {
-    padding-top: 15px;
+    padding: 15px 0;
+  }
+  .actions {
+    display: flex;
+    flex-flow: row nowrap;
   }
 }
 </style>
