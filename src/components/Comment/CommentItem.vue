@@ -47,7 +47,8 @@
           type="primary"
           plain
           round
-          icon="el-icon-chat-dot-square"
+          icon="el-icon-plus"
+          @click="onAddCommentPressed"
         ></el-button>
         <el-button
           size="mini"
@@ -56,16 +57,28 @@
           round
           icon="el-icon-star-off"
         ></el-button>
+        <el-button
+          v-if="depth > 0 && comment.comments"
+          size="mini"
+          type="primary"
+          :plain="!showMore"
+          round
+          :icon="showMore ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"
+          @click="onShowMorePressed"
+        ></el-button>
       </div>
 
-      <CommentItem
-        v-for="childComment in comment.comments"
-        :key="childComment.id"
-        :comment="childComment"
-        :replyTo="comment.author.nickname"
-        :userID="userID"
-        @update="onUpdate"
-      />
+      <div v-if="depth < 1 || showMore">
+        <CommentItem
+          v-for="childComment in comment.comments"
+          :key="childComment.id"
+          :comment="childComment"
+          :replyTo="comment.author.nickname"
+          :userID="userID"
+          :depth="depth+1"
+          @update="onUpdate"
+        />
+      </div>
     </el-card>
   </div>
 </template>
@@ -103,9 +116,13 @@ export default class CommentItem extends Vue {
 
   @Prop() replyTo!: string;
 
+  @Prop({ default: 0 }) depth!: number;
+
   private editable = false;
 
   private content = '';
+
+  private showMore = false;
 
   private get isAuthor() {
     return this.userID === this.comment.author?.id;
@@ -127,6 +144,17 @@ export default class CommentItem extends Vue {
 
   private onUpdate(comment: Comment, content: string) {
     this.$emit('update', comment, content);
+  }
+
+  private onAddCommentPressed() {
+    if (this.depth > 0) {
+      this.showMore = true;
+    }
+    // TODO add comment logic
+  }
+
+  private onShowMorePressed() {
+    this.showMore = !this.showMore;
   }
 }
 </script>
