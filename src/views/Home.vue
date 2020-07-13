@@ -27,11 +27,11 @@ export default class extends Vue {
   }
 
   private created() {
-    PostModule.GetLatestPosts();
+    PostModule.getLatestPosts();
   }
 
   private onPostCardPressed(post: Post) {
-    PostModule.PresetCurrentPost(post);
+    PostModule.selectPost(post);
     this.$router.push(`/post/${post.id}`);
   }
 }

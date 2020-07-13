@@ -13,7 +13,7 @@
             size="mini"
             round
             icon="el-icon-check"
-            @click="onEditDone"
+            @click="onEditDonePressed"
           ></el-button>
           <el-button
             v-else
@@ -22,7 +22,7 @@
             plain
             round
             icon="el-icon-edit"
-            @click="onEditButtonPressed"
+            @click="onEditPressed"
           ></el-button>
         </div>
       </div>
@@ -47,7 +47,7 @@
           plain
           round
           icon="el-icon-plus"
-          @click="onAddCommentPressed"
+          @click="onCommentAddPressed"
         ></el-button>
         <el-button
           size="mini"
@@ -68,7 +68,10 @@
       </div>
 
       <div v-if="depth < 1 || showMore">
-        <div class="draft" v-if="isDrafting">
+        <div
+          class="draft"
+          v-if="isDrafting"
+        >
           <el-card shadow="hover">
             <div class="compose">
               <el-input
@@ -84,14 +87,14 @@
                   plain
                   round
                   icon="el-icon-close"
-                  @click="onCommentCancel"
+                  @click="onCreateCancelPressed"
                 ></el-button>
                 <el-button
                   type="primary"
                   size="mini"
                   round
                   icon="el-icon-check"
-                  @click="onCommentDone"
+                  @click="onCreateDonePressed"
                 ></el-button>
               </div>
             </div>
@@ -105,7 +108,8 @@
           :replyTo="comment.author.nickname"
           :userID="userID"
           :depth="depth+1"
-          @update="onUpdate"
+          @create="onCommentCreate"
+          @update="onCommentUpdate"
         />
       </div>
     </el-card>
@@ -176,17 +180,17 @@ export default class CommentItem extends Vue {
     this.content = this.comment.content;
   }
 
-  private onEditButtonPressed() {
+  private onEditPressed() {
     this.editable = true;
   }
 
-  private onEditDone() {
+  private onEditDonePressed() {
     this.content = this.content.trim();
-    this.$emit('update', this.comment, this.content);
+    this.onCommentUpdate(this.comment, this.content);
     this.editable = false;
   }
 
-  private onUpdate(comment: Comment, content: string) {
+  private onCommentUpdate(comment: Comment, content: string) {
     this.$emit('update', comment, content);
   }
 
@@ -194,18 +198,24 @@ export default class CommentItem extends Vue {
     this.showMore = !this.showMore;
   }
 
-  private onAddCommentPressed() {
+  private onCommentAddPressed() {
     if (this.depth > 0) {
       this.showMore = true;
     }
     this.isDrafting = true;
   }
 
-  private onCommentDone() {
+  private onCreateDonePressed() {
+    this.draft = this.draft.trim();
+    this.onCommentCreate(this.userID, this.comment, this.draft);
     this.isDrafting = false;
   }
 
-  private onCommentCancel() {
+  private onCommentCreate(userID: number, parent: Comment, content: string) {
+    this.$emit('create', userID, parent, content);
+  }
+
+  private onCreateCancelPressed() {
     this.isDrafting = false;
   }
 }

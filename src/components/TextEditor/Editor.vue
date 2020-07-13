@@ -13,7 +13,7 @@
       <image-uploader
         color="#1890ff"
         class="editor-upload-btn"
-        @successCBK="imageSuccessCBK"
+        @succeed="onUploadSucceed"
       />
     </div>
   </div>
@@ -199,7 +199,7 @@ export default class extends Vue {
     this.$nextTick(() => tinymceManager.init(this.initOptions));
   }
 
-  private imageSuccessCBK(arr: UploadObject[]) {
+  private onUploadSucceed(arr: UploadObject[]) {
     const editor = (window as any).tinymce.get(this.id);
     arr.forEach((v) => {
       editor.insertContent(`<img class="wscnph" src="${v.url}" >`);

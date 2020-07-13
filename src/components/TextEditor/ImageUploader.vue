@@ -76,7 +76,7 @@ export default class extends Vue {
       If there is a network problem, please refresh the page and upload again!`);
       return;
     }
-    this.$emit('successCBK', arr);
+    this.$emit('succeed', arr);
     this.listObj = {};
     this.defaultFileList = [];
     this.dialogVisible = false;

@@ -43,11 +43,11 @@
 
           <div class="comment-wrapper">
             <CommentItem
-              v-for="(comment, index) in post.comments"
+              v-for="comment in post.comments"
               :key="comment.id"
               :comment="comment"
               :userID="userID"
-              :treePath="[index]"
+              @create="onCommentCreate"
               @update="onCommentUpdate"
             />
           </div>
@@ -186,7 +186,7 @@ export default class extends Vue {
   private async created() {
     const postID = Number.parseInt(this.$route.params.id, 10);
     if (!Number.isNaN(postID)) {
-      await PostModule.fetchPostDetail(postID);
+      await PostModule.getPostDetail(postID);
       this.draftPost.id = postID;
       this.draftPost.title = this.post.title;
       this.draftPost.content = this.post.content;
@@ -196,7 +196,7 @@ export default class extends Vue {
   private async onEditButtonPressed() {
     if (this.editable) {
       this.isActionLoading = true;
-      await PostModule.syncPostUpdate(this.draftPost);
+      await PostModule.updatePost(this.draftPost);
       this.isActionLoading = false;
     }
     this.editable = !this.editable;
@@ -204,8 +204,12 @@ export default class extends Vue {
 
   private async onDeleteButtonPressed() {
     this.isActionLoading = true;
-    await PostModule.syncPostDelete();
+    await PostModule.deletePost();
     this.$router.replace('/');
+  }
+
+  private async onCommentCreate(userID: number, parent: Comment, content: string) {
+    await PostModule.createComment({ userID, parent, content });
   }
 
   private async onCommentUpdate(comment: Comment, content: string) {

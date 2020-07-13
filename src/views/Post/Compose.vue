@@ -91,7 +91,7 @@ export default class extends Vue {
 
   private async onPublishButtonPressed() {
     this.isLoading = true;
-    await PostModule.syncPostCreate(this.draftPost);
+    await PostModule.createPost(this.draftPost);
     this.$router.replace(`/post/${PostModule.currentPost.id}`);
   }
 }
