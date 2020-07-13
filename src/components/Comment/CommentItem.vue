@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="container">
     <el-card
       shadow="hover"
       :key="comment.id"
@@ -13,7 +13,7 @@
             size="mini"
             round
             icon="el-icon-check"
-            @click="onDoneButtonPressed"
+            @click="onEditDone"
           ></el-button>
           <el-button
             v-else
@@ -34,8 +34,7 @@
           autosize
           placeholder="请输入内容"
           v-model="content"
-        >
-        </el-input>
+        ></el-input>
         <div v-else>
           {{content}}
         </div>
@@ -69,6 +68,36 @@
       </div>
 
       <div v-if="depth < 1 || showMore">
+        <div class="draft" v-if="isDrafting">
+          <el-card shadow="hover">
+            <div class="compose">
+              <el-input
+                type="textarea"
+                autosize
+                placeholder="请输入内容"
+                v-model="draft"
+              ></el-input>
+              <div class="actions">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  plain
+                  round
+                  icon="el-icon-close"
+                  @click="onCommentCancel"
+                ></el-button>
+                <el-button
+                  type="primary"
+                  size="mini"
+                  round
+                  icon="el-icon-check"
+                  @click="onCommentDone"
+                ></el-button>
+              </div>
+            </div>
+          </el-card>
+        </div>
+
         <CommentItem
           v-for="childComment in comment.comments"
           :key="childComment.id"
@@ -84,7 +113,7 @@
 </template>
 
 <style lang="scss" scoped>
-.wrapper {
+.container {
   margin: 15px 0;
   .header {
     display: flex;
@@ -98,6 +127,17 @@
   .actions {
     display: flex;
     flex-flow: row nowrap;
+  }
+  .draft {
+    padding: 15px 0 0;
+    .compose {
+      display: flex;
+      flex-flow: column nowrap;
+      .actions {
+        padding-top: 15px;
+        align-self: flex-end;
+      }
+    }
   }
 }
 </style>
@@ -124,6 +164,10 @@ export default class CommentItem extends Vue {
 
   private showMore = false;
 
+  private isDrafting = false;
+
+  private draft = '';
+
   private get isAuthor() {
     return this.userID === this.comment.author?.id;
   }
@@ -136,7 +180,7 @@ export default class CommentItem extends Vue {
     this.editable = true;
   }
 
-  private onDoneButtonPressed() {
+  private onEditDone() {
     this.content = this.content.trim();
     this.$emit('update', this.comment, this.content);
     this.editable = false;
@@ -146,15 +190,23 @@ export default class CommentItem extends Vue {
     this.$emit('update', comment, content);
   }
 
+  private onShowMorePressed() {
+    this.showMore = !this.showMore;
+  }
+
   private onAddCommentPressed() {
     if (this.depth > 0) {
       this.showMore = true;
     }
-    // TODO add comment logic
+    this.isDrafting = true;
   }
 
-  private onShowMorePressed() {
-    this.showMore = !this.showMore;
+  private onCommentDone() {
+    this.isDrafting = false;
+  }
+
+  private onCommentCancel() {
+    this.isDrafting = false;
   }
 }
 </script>
