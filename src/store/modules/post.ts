@@ -72,6 +72,13 @@ class PostModule extends VuexModule implements PostState {
     const { comment, updatedComment } = match;
     comment.content = updatedComment.content;
     comment.updatedAt = updatedComment.updatedAt;
+    comment.isDeleted = false;
+  }
+
+  @Mutation
+  private DELETE_COMMENT(comment: Comment) {
+    // eslint-disable-next-line no-param-reassign
+    comment.isDeleted = true;
   }
 
   @Action
@@ -161,6 +168,14 @@ class PostModule extends VuexModule implements PostState {
     if (data.ok) {
       const updatedComment: Comment = data.data;
       this.EDIT_COMMENT({ comment: args.comment, updatedComment });
+    }
+  }
+
+  @Action
+  public async deleteComment(comment: Comment) {
+    const { data } = await commentApi.deleteComment(comment.id);
+    if (data.ok) {
+      this.DELETE_COMMENT(comment);
     }
   }
 }

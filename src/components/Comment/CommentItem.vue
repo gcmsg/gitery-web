@@ -4,9 +4,28 @@
       shadow="hover"
       :key="comment.id"
     >
+      <!-- Header section -->
       <div class="header">
         <div><b>{{comment.author.nickname}}</b> <span v-if="replyTo">replied to <b>{{replyTo}}</b></span>:</div>
         <div v-if="isAuthor">
+          <el-button
+            v-if="editable && !comment.isDeleted"
+            size="mini"
+            type="danger"
+            plain
+            round
+            icon="el-icon-delete"
+            @click="onDeletePressed"
+          ></el-button>
+          <el-button
+            v-if="editable"
+            size="mini"
+            type="primary"
+            plain
+            round
+            icon="el-icon-close"
+            @click="onEditCancelPressed"
+          ></el-button>
           <el-button
             v-if="editable"
             type="primary"
@@ -27,6 +46,7 @@
         </div>
       </div>
 
+      <!-- Content section -->
       <div class="content">
         <el-input
           v-if="editable"
@@ -35,19 +55,27 @@
           placeholder="请输入内容"
           v-model="content"
         ></el-input>
+        <el-alert
+          v-else-if="comment.isDeleted"
+          title="This comment has been deleted"
+          type="info"
+          :closable="false"
+        >
+        </el-alert>
         <div v-else>
           {{content}}
         </div>
       </div>
 
+      <!-- Actions section -->
       <div class="actions">
         <el-button
           size="mini"
           type="primary"
           plain
           round
-          icon="el-icon-plus"
-          @click="onCommentAddPressed"
+          :icon="isDrafting ? 'el-icon-close' : 'el-icon-plus'"
+          @click="onCommentActionPressed"
         ></el-button>
         <el-button
           size="mini"
@@ -67,6 +95,7 @@
         ></el-button>
       </div>
 
+      <!-- Add new comment -->
       <div v-if="depth < 1 || showMore">
         <div
           class="draft"
@@ -110,6 +139,7 @@
           :depth="depth+1"
           @create="onCommentCreate"
           @update="onCommentUpdate"
+          @delete="onCommentDelete"
         />
       </div>
     </el-card>
@@ -186,8 +216,15 @@ export default class CommentItem extends Vue {
 
   private onEditDonePressed() {
     this.content = this.content.trim();
-    this.onCommentUpdate(this.comment, this.content);
+    if (this.content !== this.comment.content || this.comment.isDeleted) {
+      this.onCommentUpdate(this.comment, this.content);
+    }
     this.editable = false;
+  }
+
+  private onEditCancelPressed() {
+    this.editable = false;
+    this.content = this.comment.content;
   }
 
   private onCommentUpdate(comment: Comment, content: string) {
@@ -198,11 +235,12 @@ export default class CommentItem extends Vue {
     this.showMore = !this.showMore;
   }
 
-  private onCommentAddPressed() {
+  private onCommentActionPressed() {
     if (this.depth > 0) {
       this.showMore = true;
     }
-    this.isDrafting = true;
+    this.draft = '';
+    this.isDrafting = !this.isDrafting;
   }
 
   private onCreateDonePressed() {
@@ -217,6 +255,17 @@ export default class CommentItem extends Vue {
 
   private onCreateCancelPressed() {
     this.isDrafting = false;
+    this.draft = '';
+  }
+
+  private onDeletePressed() {
+    this.editable = false;
+    this.content = this.comment.content;
+    this.onCommentDelete(this.comment);
+  }
+
+  private onCommentDelete(comment: Comment) {
+    this.$emit('delete', comment);
   }
 }
 </script>

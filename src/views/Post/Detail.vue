@@ -49,6 +49,7 @@
               :userID="userID"
               @create="onCommentCreate"
               @update="onCommentUpdate"
+              @delete="onCommentDelete"
             />
           </div>
         </div>
@@ -214,6 +215,10 @@ export default class extends Vue {
 
   private async onCommentUpdate(comment: Comment, content: string) {
     await PostModule.updateComment({ comment, content });
+  }
+
+  private async onCommentDelete(comment: Comment) {
+    await PostModule.deleteComment(comment);
   }
 }
 </script>
