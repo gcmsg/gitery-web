@@ -6,10 +6,13 @@ import {
   Breadcrumb, BreadcrumbItem,
   Dropdown, DropdownMenu, DropdownItem,
   Input, Checkbox,
-  Button,
+  Button, Tag,
   Loading,
   Divider,
   Popover, Popconfirm,
+  Dialog,
+  Upload,
+  Alert,
 } from 'element-ui';
 import locale from 'element-ui/lib/locale';
 import lang from 'element-ui/lib/locale/lang/en';
@@ -24,8 +27,11 @@ export default [
   Breadcrumb, BreadcrumbItem,
   Dropdown, DropdownMenu, DropdownItem,
   Input, Checkbox,
-  Button,
+  Button, Tag,
   Loading,
   Divider,
   Popover, Popconfirm,
+  Dialog,
+  Upload,
+  Alert,
 ];

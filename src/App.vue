@@ -34,7 +34,6 @@ html {
     "Segoe UI Symbol";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
   color: #333;
   margin: 0;
   padding: 0;

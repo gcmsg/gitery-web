@@ -1,9 +1,9 @@
 <template>
-  <div @click="$emit('pressed', post)">
-    <el-card
-      v-bind:key="post.id"
-      class="box-card"
-    >
+  <div
+    class="box-card"
+    @click="$emit('pressed', post)"
+  >
+    <el-card v-bind:key="post.id">
       <div class="card-content">
         <h1>{{ post.title }}</h1>
         <div class="post-info">
@@ -38,7 +38,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { formatUnixTimestamp } from '@/utils/format';
 import { Post } from '@/prototypes/post';
 
-@Component
+@Component({
+  name: 'PostCard',
+})
 export default class PostCard extends Vue {
   @Prop({ required: true }) post!: Post;
 

@@ -1,20 +1,19 @@
 /* eslint-disable import/no-cycle */
+import Vue from 'vue';
 import {
   VuexModule, Module, getModule, Action, Mutation,
 } from 'vuex-module-decorators';
 import store from '@/store';
 import { Post } from '@/prototypes/post';
 import { Comment } from '@/prototypes/comment';
-import {
-  getLatestPosts, getPost, updatePost, createPost, deletePost,
-} from '@/api/post';
+import * as postApi from '@/api/post';
+import * as commentApi from '@/api/comment';
 
 export interface PostState {
   tags: string[];
   posts: Post[];
   isLoading: boolean;
   currentPost: Post;
-  draftPost: Post;
 }
 
 @Module({ dynamic: true, store, name: 'post' })
@@ -30,37 +29,23 @@ class PostModule extends VuexModule implements PostState {
     content: '',
   } as Post;
 
-  public draftPost = {
-    title: '',
-    content: '',
-  } as Post;
-
   @Mutation
   private SET_LOADING(isLoading: boolean) {
     this.isLoading = isLoading;
   }
 
   @Mutation
-  private SET_POSTS(posts: Post[]) {
+  private UPDATE_POSTS(posts: Post[]) {
     this.posts = posts;
   }
 
   @Mutation
-  private INIT_DRAFT_POST() {
-    this.draftPost = {
-      title: '',
-      content: '',
-    } as Post;
-  }
-
-  @Mutation
-  private SET_CURRENT_POST(post: Post) {
+  private SELECT_POST(post: Post) {
     this.currentPost = post;
-    this.draftPost = post;
   }
 
   @Mutation
-  private SYNC_UPDATE_TO_LIST() {
+  private UPDATE_POST_LIST() {
     if (this.currentPost.id === undefined) return;
     const relatedIndex = this.posts.findIndex((post: Post) => post.id === this.currentPost.id);
     if (relatedIndex >= 0) {
@@ -71,117 +56,130 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private DELETE_POST_FROM_LIST() {
+  private DELETE_POST() {
     if (this.currentPost.id === undefined) return;
     this.posts = this.posts.filter((post: Post) => post.id !== this.currentPost.id);
   }
 
   @Mutation
-  private SAVE_POST() {
-    this.currentPost = this.draftPost;
-  }
-
-  @Mutation
-  private SET_DRAFT_POST_TITLE(title: string) {
-    if (this.draftPost) {
-      this.draftPost.title = title;
+  private CREATE_COMMENT(match: { comment: Comment; parent?: Comment }) {
+    const { comment, parent } = match;
+    if (parent) {
+      Vue.set(parent, 'comments', [...parent.comments || [], comment]);
+    } else {
+      Vue.set(this.currentPost, 'comments', [...this.currentPost.comments || [], comment]);
     }
   }
 
   @Mutation
-  private SET_DRAFT_POST_CONTENT(content: string) {
-    if (this.draftPost) {
-      this.draftPost.content = content;
-    }
+  private EDIT_COMMENT(match: { comment: Comment; updatedComment: Comment }) {
+    const { comment, updatedComment } = match;
+    comment.content = updatedComment.content;
+    comment.updatedAt = updatedComment.updatedAt;
+    comment.isDeleted = false;
   }
 
   @Mutation
-  private ADD_COMMENT_FOR_CURRENT_POST(comment: Comment) {
-    if (this.currentPost) {
-      if (this.currentPost.comments) {
-        this.currentPost.comments.push(comment);
-      } else {
-        this.currentPost.comments = [comment];
-      }
-    }
+  private DELETE_COMMENT(comment: Comment) {
+    // eslint-disable-next-line no-param-reassign
+    comment.isDeleted = true;
   }
 
   @Action
-  public async GetLatestPosts() {
+  public async getLatestPosts() {
     this.SET_LOADING(true);
-    const { data } = await getLatestPosts();
+    const { data } = await postApi.getLatestPosts();
     this.SET_LOADING(false);
     if (data.ok) {
       const posts: Post[] = data.data;
-      this.SET_POSTS(posts);
+      this.UPDATE_POSTS(posts);
     } else {
       // handle error
     }
   }
 
   @Action
-  public async PresetCurrentPost(post: Post) {
-    this.SET_CURRENT_POST(post);
+  public async selectPost(post: Post) {
+    this.SELECT_POST(post);
   }
 
   @Action
-  public async fetchPostDetail(postID: number) {
-    const { data } = await getPost(postID);
+  public async getPostDetail(postID: number) {
+    const { data } = await postApi.getPost(postID);
 
     if (data.ok) {
       const post: Post = data.data;
-      this.SET_CURRENT_POST(post);
+      this.SELECT_POST(post);
     } else {
       // handle error
     }
   }
 
   @Action
-  public initDraftPost() {
-    this.INIT_DRAFT_POST();
-  }
-
-  @Action
-  public updateDraftPostTitle(title: string) {
-    this.SET_DRAFT_POST_TITLE(title);
-  }
-
-  @Action
-  public updateDraftPostContent(Content: string) {
-    this.SET_DRAFT_POST_CONTENT(Content);
-  }
-
-  @Action
-  public async syncPostCreate() {
-    const { data } = await createPost(this.draftPost);
+  public async createPost(draft: Post) {
+    const { data } = await postApi.createPost(draft);
     if (data.ok) {
       const post: Post = data.data;
-      this.SET_CURRENT_POST(post);
-      this.SYNC_UPDATE_TO_LIST();
+      this.SELECT_POST(post);
+      this.UPDATE_POST_LIST();
     } else {
       // handle error
     }
   }
 
   @Action
-  public async syncPostUpdate() {
-    const { data } = await updatePost(this.draftPost);
+  public async updatePost(draft: Post) {
+    const { data } = await postApi.updatePost(draft);
     if (data.ok) {
-      this.SAVE_POST();
-      this.SYNC_UPDATE_TO_LIST();
-      // const post: Post = data.data;
-      // notify success
-      console.log('update post success');
+      const post: Post = data.data;
+      this.SELECT_POST(post);
+      this.UPDATE_POST_LIST();
     } else {
       // handle error
     }
   }
 
   @Action
-  public async syncPostDelete() {
-    const { data } = await deletePost(this.currentPost.id);
+  public async deletePost() {
+    const { data } = await postApi.deletePost(this.currentPost.id);
     if (data.ok) {
-      this.DELETE_POST_FROM_LIST();
+      this.DELETE_POST();
+    }
+  }
+
+  @Action
+  public async createComment(args: { userID: number; postID: number; content: string; parent?: Comment }) {
+    const composed = {
+      userID: args.userID,
+      postID: args.postID,
+      parentID: args.parent?.id,
+      content: args.content,
+    } as Comment;
+    const { data } = await commentApi.createComment(composed);
+    if (data.ok) {
+      const comment: Comment = data.data;
+      this.CREATE_COMMENT({ comment, parent: args.parent });
+    }
+  }
+
+  @Action
+  public async updateComment(args: { comment: Comment; content: string }) {
+    const composed = {
+      id: args.comment.id,
+      content: args.content,
+    } as Comment;
+    const { data } = await commentApi.updateComment(composed);
+    if (data.ok) {
+      const updatedComment: Comment = data.data;
+      this.EDIT_COMMENT({ comment: args.comment, updatedComment });
+    }
+  }
+
+  @Action
+  public async deleteComment(comment: Comment) {
+    const { data } = await commentApi.deleteComment(comment.id);
+    if (data.ok) {
+      this.DELETE_COMMENT(comment);
     }
   }
 }
