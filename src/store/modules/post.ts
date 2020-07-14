@@ -62,9 +62,13 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private CREATE_COMMENT(match: { comment: Comment; parent: Comment }) {
+  private CREATE_COMMENT(match: { comment: Comment; parent?: Comment }) {
     const { comment, parent } = match;
-    Vue.set(parent, 'comments', [...parent.comments || [], comment]);
+    if (parent) {
+      Vue.set(parent, 'comments', [...parent.comments || [], comment]);
+    } else {
+      Vue.set(this.currentPost, 'comments', [...this.currentPost.comments || [], comment]);
+    }
   }
 
   @Mutation
@@ -144,11 +148,11 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public async createComment(args: { userID: number; parent: Comment; content: string }) {
+  public async createComment(args: { userID: number; postID: number; content: string; parent?: Comment }) {
     const composed = {
       userID: args.userID,
-      postID: args.parent.postID,
-      parentID: args.parent.id,
+      postID: args.postID,
+      parentID: args.parent?.id,
       content: args.content,
     } as Comment;
     const { data } = await commentApi.createComment(composed);

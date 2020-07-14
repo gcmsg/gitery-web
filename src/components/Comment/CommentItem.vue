@@ -5,7 +5,7 @@
       :key="comment.id"
     >
       <!-- Header section -->
-      <div class="header">
+      <div class="header-wrapper">
         <div><b>{{comment.author.nickname}}</b> <span v-if="replyTo">replied to <b>{{replyTo}}</b></span>:</div>
         <div v-if="isAuthor">
           <el-button
@@ -24,7 +24,7 @@
             plain
             round
             icon="el-icon-close"
-            @click="onEditCancelPressed"
+            @click="onEditActionPressed"
           ></el-button>
           <el-button
             v-if="editable"
@@ -47,7 +47,7 @@
       </div>
 
       <!-- Content section -->
-      <div class="content">
+      <div class="content-wrapper">
         <el-input
           v-if="editable"
           placeholder="请输入内容"
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Actions section -->
-      <div class="actions">
+      <div class="actions-wrapper">
         <el-button
           size="mini"
           type="primary"
@@ -96,34 +96,13 @@
       <!-- Add new comment -->
       <div v-if="depth < 1 || showMore">
         <div
-          class="draft"
+          class="draft-wrapper"
           v-if="isDrafting"
         >
-          <el-card shadow="hover">
-            <div class="compose">
-              <el-input
-                placeholder="请输入内容"
-                v-model="draft"
-              ></el-input>
-              <div class="actions">
-                <el-button
-                  size="mini"
-                  type="primary"
-                  plain
-                  round
-                  icon="el-icon-close"
-                  @click="onCreateCancelPressed"
-                ></el-button>
-                <el-button
-                  type="primary"
-                  size="mini"
-                  round
-                  icon="el-icon-check"
-                  @click="onCreateDonePressed"
-                ></el-button>
-              </div>
-            </div>
-          </el-card>
+          <CommentCompose
+            @create="onCreateDone"
+            @cancel="onCommentActionPressed"
+          ></CommentCompose>
         </div>
 
         <CommentItem
@@ -145,29 +124,21 @@
 <style lang="scss" scoped>
 .container {
   margin: 15px 0;
-  .header {
+  .header-wrapper {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
   }
-  .content {
+  .content-wrapper {
     padding: 15px 0;
   }
-  .actions {
+  .actions-wrapper {
     display: flex;
     flex-flow: row nowrap;
   }
-  .draft {
+  .draft-wrapper {
     padding: 15px 0 0;
-    .compose {
-      display: flex;
-      flex-flow: column nowrap;
-      .actions {
-        padding-top: 15px;
-        align-self: flex-end;
-      }
-    }
   }
 }
 </style>
@@ -175,9 +146,13 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Comment } from '@/prototypes/comment';
+import CommentCompose from './CommentCompose.vue';
 
 @Component({
   name: 'CommentItem',
+  components: {
+    CommentCompose,
+  },
 })
 export default class CommentItem extends Vue {
   @Prop({ required: true }) comment!: Comment;
@@ -196,8 +171,6 @@ export default class CommentItem extends Vue {
 
   private isDrafting = false;
 
-  private draft = '';
-
   private get isAuthor() {
     return this.userID === this.comment.author?.id;
   }
@@ -206,8 +179,14 @@ export default class CommentItem extends Vue {
     this.content = this.comment.content;
   }
 
-  private onEditPressed() {
-    this.editable = true;
+  private onShowMorePressed() {
+    this.showMore = !this.showMore;
+  }
+
+  // update comment
+  private onEditActionPressed() {
+    this.content = this.comment.content;
+    this.editable = !this.editable;
   }
 
   private onEditDonePressed() {
@@ -218,42 +197,28 @@ export default class CommentItem extends Vue {
     this.editable = false;
   }
 
-  private onEditCancelPressed() {
-    this.editable = false;
-    this.content = this.comment.content;
-  }
-
   private onCommentUpdate(comment: Comment, content: string) {
     this.$emit('update', comment, content);
   }
 
-  private onShowMorePressed() {
-    this.showMore = !this.showMore;
-  }
-
+  // create comment
   private onCommentActionPressed() {
     if (this.depth > 0) {
       this.showMore = true;
     }
-    this.draft = '';
     this.isDrafting = !this.isDrafting;
   }
 
-  private onCreateDonePressed() {
-    this.draft = this.draft.trim();
-    this.onCommentCreate(this.userID, this.comment, this.draft);
+  private onCreateDone(draft: string) {
+    this.onCommentCreate(draft, this.comment);
     this.isDrafting = false;
   }
 
-  private onCommentCreate(userID: number, parent: Comment, content: string) {
-    this.$emit('create', userID, parent, content);
+  private onCommentCreate(content: string, parent: Comment) {
+    this.$emit('create', content, parent);
   }
 
-  private onCreateCancelPressed() {
-    this.isDrafting = false;
-    this.draft = '';
-  }
-
+  // delete comment
   private onDeletePressed() {
     this.editable = false;
     this.content = this.comment.content;

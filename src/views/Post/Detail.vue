@@ -41,6 +41,45 @@
             />
           </div>
 
+          <div class="tag-wrapper">
+            <el-tag
+              v-for="tag in post.tags"
+              type="info"
+              :key="tag.id"
+              style="margin-right: 10px"
+            >
+              {{tag.name}}
+            </el-tag>
+          </div>
+
+          <div class="action-wrapper">
+            <el-button
+              size="mini"
+              type="primary"
+              plain
+              round
+              icon="el-icon-plus"
+              @click="onCommentActionPressed"
+            ></el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              plain
+              round
+              icon="el-icon-star-off"
+            ></el-button>
+
+            <div
+              class="comment-draft-wrapper"
+              v-if="isCommentComposing"
+            >
+              <CommentCompose
+                @create="onCommentComposed"
+                @cancel="onCommentActionPressed"
+              ></CommentCompose>
+            </div>
+          </div>
+
           <div class="comment-wrapper">
             <CommentItem
               v-for="comment in post.comments"
@@ -112,7 +151,16 @@
     align-items: center;
   }
   .content-wrapper {
-    padding: 8px 0;
+    padding: 15px 0;
+  }
+  .tag-wrapper {
+    padding: 15px 0;
+  }
+  .action-wrapper {
+    padding: 15px 0;
+    .comment-draft-wrapper {
+      padding: 15px 0 0;
+    }
   }
   .comment-wrapper {
     padding: 15px 0;
@@ -131,6 +179,7 @@ import PostModule from '@/store/modules/post';
 import UserModule from '@/store/modules/user';
 import TextEditor from '@/components/TextEditor/Editor.vue';
 import CommentItem from '@/components/Comment/CommentItem.vue';
+import CommentCompose from '@/components/Comment/CommentCompose.vue';
 import { formatUnixTimestamp } from '@/utils/format';
 
 @Component({
@@ -138,6 +187,7 @@ import { formatUnixTimestamp } from '@/utils/format';
   components: {
     TextEditor,
     CommentItem,
+    CommentCompose,
   },
 })
 export default class extends Vue {
@@ -149,6 +199,8 @@ export default class extends Vue {
     title: '',
     content: '',
   } as Post;
+
+  private isCommentComposing = false;
 
   private get post() {
     return PostModule.currentPost;
@@ -209,8 +261,23 @@ export default class extends Vue {
     this.$router.replace('/');
   }
 
-  private async onCommentCreate(userID: number, parent: Comment, content: string) {
-    await PostModule.createComment({ userID, parent, content });
+  // create new comment for post
+  private onCommentActionPressed() {
+    this.isCommentComposing = !this.isCommentComposing;
+  }
+
+  private onCommentComposed(content: string) {
+    this.onCommentCreate(content, undefined);
+    this.isCommentComposing = false;
+  }
+
+  private async onCommentCreate(content: string, parent?: Comment) {
+    await PostModule.createComment({
+      userID: this.userID,
+      postID: this.post.id,
+      content,
+      parent,
+    });
   }
 
   private async onCommentUpdate(comment: Comment, content: string) {
