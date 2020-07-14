@@ -50,8 +50,6 @@
       <div class="content">
         <el-input
           v-if="editable"
-          type="textarea"
-          autosize
           placeholder="请输入内容"
           v-model="content"
         ></el-input>
@@ -104,8 +102,6 @@
           <el-card shadow="hover">
             <div class="compose">
               <el-input
-                type="textarea"
-                autosize
                 placeholder="请输入内容"
                 v-model="draft"
               ></el-input>
