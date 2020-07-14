@@ -45,7 +45,7 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private UPDATE_POST() {
+  private UPDATE_POST_LIST() {
     if (this.currentPost.id === undefined) return;
     const relatedIndex = this.posts.findIndex((post: Post) => post.id === this.currentPost.id);
     if (relatedIndex >= 0) {
@@ -117,7 +117,7 @@ class PostModule extends VuexModule implements PostState {
     if (data.ok) {
       const post: Post = data.data;
       this.SELECT_POST(post);
-      this.UPDATE_POST();
+      this.UPDATE_POST_LIST();
     } else {
       // handle error
     }
@@ -129,7 +129,7 @@ class PostModule extends VuexModule implements PostState {
     if (data.ok) {
       const post: Post = data.data;
       this.SELECT_POST(post);
-      this.UPDATE_POST();
+      this.UPDATE_POST_LIST();
     } else {
       // handle error
     }
