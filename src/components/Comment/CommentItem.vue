@@ -41,7 +41,7 @@
             plain
             round
             icon="el-icon-edit"
-            @click="onEditPressed"
+            @click="onEditActionPressed"
           ></el-button>
         </div>
       </div>
