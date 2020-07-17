@@ -47,6 +47,15 @@ html {
     .breadcrumb-wrapper {
       padding: 8px 15px;
     }
+    .material-icons.md-12 {
+      font-size: 12px;
+    }
+    .material-icons.md-18 {
+      font-size: 18px;
+    }
+    .material-icons.md-24 {
+      font-size: 24px;
+    }
   }
 }
 </style>

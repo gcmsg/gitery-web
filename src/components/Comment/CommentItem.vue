@@ -10,39 +10,43 @@
         <div v-if="isAuthor">
           <el-button
             v-if="editable && !comment.isDeleted"
-            size="mini"
             type="danger"
-            plain
+            size="mini"
             round
-            icon="el-icon-delete"
             @click="onDeletePressed"
-          ></el-button>
+          >
+            <i class="material-icons md-12">delete</i>
+          </el-button>
           <el-button
             v-if="editable"
-            size="mini"
             type="primary"
+            size="mini"
             plain
             round
-            icon="el-icon-close"
             @click="onEditActionPressed"
-          ></el-button>
+          >
+            <i class="material-icons md-12">close</i>
+          </el-button>
           <el-button
             v-if="editable"
             type="primary"
             size="mini"
+            plain
             round
-            icon="el-icon-check"
             @click="onEditDonePressed"
-          ></el-button>
+          >
+            <i class="material-icons md-12">check</i>
+          </el-button>
           <el-button
             v-else
             type="primary"
             size="mini"
             plain
             round
-            icon="el-icon-edit"
             @click="onEditActionPressed"
-          ></el-button>
+          >
+            <i class="material-icons md-12">edit</i>
+          </el-button>
         </div>
       </div>
 
@@ -69,28 +73,31 @@
       <div class="actions-wrapper">
         <el-button
           size="mini"
-          type="primary"
-          plain
-          round
-          :icon="isDrafting ? 'el-icon-close' : 'el-icon-plus'"
-          @click="onCommentActionPressed"
-        ></el-button>
+          type="text"
+        >
+          <i class="material-icons md-18">thumb_up</i>
+        </el-button>
         <el-button
           size="mini"
-          type="primary"
-          plain
-          round
-          icon="el-icon-star-off"
-        ></el-button>
+          type="text"
+        >
+          <i class="material-icons md-18">thumb_down</i>
+        </el-button>
+        <el-button
+          size="mini"
+          type="text"
+          @click="onCommentActionPressed"
+        >
+          <i class="material-icons md-18">{{ isDrafting ? "close" : "reply"}}</i>
+        </el-button>
         <el-button
           v-if="depth > 0 && comment.comments"
           size="mini"
-          type="primary"
-          :plain="!showMore"
-          round
-          :icon="showMore ? 'el-icon-arrow-down' : 'el-icon-arrow-right'"
+          type="text"
           @click="onShowMorePressed"
-        ></el-button>
+        >
+          <i class="material-icons md-18">{{ showMore ? "expand_less" : "expand_more"}}</i>
+        </el-button>
       </div>
 
       <!-- Add new comment -->

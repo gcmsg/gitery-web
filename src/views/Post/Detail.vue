@@ -58,16 +58,18 @@
               type="primary"
               plain
               round
-              icon="el-icon-plus"
-              @click="onCommentActionPressed"
-            ></el-button>
+            >
+              <i class="material-icons md-18">favorite</i>
+            </el-button>
             <el-button
               size="mini"
               type="primary"
               plain
               round
-              icon="el-icon-star-off"
-            ></el-button>
+              @click="onCommentActionPressed"
+            >
+              <i class="material-icons md-18">add_comment</i>
+            </el-button>
 
             <div
               class="comment-draft-wrapper"
