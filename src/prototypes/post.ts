@@ -10,4 +10,5 @@ export interface Post {
   updatedAt: number;
   comments?: Comment[];
   author?: User;
+  likes?: number;
 }

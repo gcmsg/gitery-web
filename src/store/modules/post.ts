@@ -132,6 +132,9 @@ class PostModule extends VuexModule implements PostState {
     const { data } = await postApi.updatePost(draft);
     if (data.ok) {
       const post: Post = data.data;
+      post.comments = this.currentPost.comments;
+      post.author = this.currentPost.author;
+
       this.SELECT_POST(post);
       this.UPDATE_POST_LIST();
     } else {
