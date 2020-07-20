@@ -88,7 +88,7 @@
           type="text"
           @click="onCommentActionPressed"
         >
-          <i class="material-icons md-18">{{ isDrafting ? "close" : "reply"}}</i>
+          <i class="material-icons md-24">{{ isDrafting ? "close" : "reply"}}</i>
         </el-button>
         <el-button
           v-if="depth > 0 && comment.comments"
@@ -96,7 +96,7 @@
           type="text"
           @click="onShowMorePressed"
         >
-          <i class="material-icons md-18">{{ showMore ? "expand_less" : "expand_more"}}</i>
+          <i class="material-icons md-24">{{ showMore ? "unfold_less" : "unfold_more"}}</i>
         </el-button>
       </div>
 
