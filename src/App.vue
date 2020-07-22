@@ -65,6 +65,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
 import UserModule from '@/store/modules/user';
+import ErrorModule from '@/store/modules/error';
 import NavigationBar from '@/components/NavigationBar.vue';
 import HomeRoute from './router/home';
 import AboutRoute from './router/about';
@@ -78,12 +79,16 @@ import AboutRoute from './router/about';
 export default class extends Vue {
   private routes: RouteConfig[] = [HomeRoute, AboutRoute];
 
-  private created() {
-    UserModule.LoadToken();
-  }
-
   private get isLoggedIn() {
     return UserModule.isLoggedIn;
+  }
+
+  private get globalError() {
+    return ErrorModule.error;
+  }
+
+  private created() {
+    UserModule.LoadToken();
   }
 
   private onLoginPressed() {

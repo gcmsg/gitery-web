@@ -76,12 +76,14 @@
           type="text"
         >
           <i class="material-icons md-18">thumb_up</i>
+          <span>{{comment.voteUp}}</span>
         </el-button>
         <el-button
           size="mini"
           type="text"
         >
           <i class="material-icons md-18">thumb_down</i>
+          <span>{{comment.voteDown}}</span>
         </el-button>
         <el-button
           size="mini"
