@@ -11,7 +11,7 @@ export interface ErrorState {
   isFatal: boolean;
 }
 
-@Module({ dynamic: true, store, name: 'user' })
+@Module({ dynamic: true, store, name: 'error' })
 class ErrorModule extends VuexModule implements ErrorState {
   public error: Error | ServerError | undefined;
 
