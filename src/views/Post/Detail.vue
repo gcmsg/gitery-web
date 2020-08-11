@@ -59,7 +59,7 @@
               plain
               round
             >
-              <i class="material-icons md-18">favorite</i>
+              <i class="far fa-heart"></i>
             </el-button>
             <el-button
               size="mini"
@@ -68,7 +68,7 @@
               round
               @click="onCommentActionPressed"
             >
-              <i class="material-icons md-18">add_comment</i>
+              <i class="far fa-comment"></i>
             </el-button>
 
             <div

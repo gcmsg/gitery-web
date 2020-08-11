@@ -15,7 +15,7 @@
             round
             @click="onDeletePressed"
           >
-            <i class="material-icons md-12">delete</i>
+            <i class="fas fa-trash"></i>
           </el-button>
           <el-button
             v-if="editable"
@@ -25,7 +25,7 @@
             round
             @click="onEditActionPressed"
           >
-            <i class="material-icons md-12">close</i>
+            <i class="fas fa-times"></i>
           </el-button>
           <el-button
             v-if="editable"
@@ -35,7 +35,7 @@
             round
             @click="onEditDonePressed"
           >
-            <i class="material-icons md-12">check</i>
+            <i class="fas fa-check"></i>
           </el-button>
           <el-button
             v-else
@@ -45,7 +45,7 @@
             round
             @click="onEditActionPressed"
           >
-            <i class="material-icons md-12">edit</i>
+            <i class="fas fa-pen"></i>
           </el-button>
         </div>
       </div>
@@ -75,14 +75,14 @@
           size="mini"
           type="text"
         >
-          <i class="material-icons md-18">thumb_up</i>
+          <i class="far fa-thumbs-up md-18"></i>
           <span>{{comment.voteUp}}</span>
         </el-button>
         <el-button
           size="mini"
           type="text"
         >
-          <i class="material-icons md-18">thumb_down</i>
+          <i class="far fa-thumbs-down md-18"></i>
           <span>{{comment.voteDown}}</span>
         </el-button>
         <el-button
@@ -90,7 +90,7 @@
           type="text"
           @click="onCommentActionPressed"
         >
-          <i class="material-icons md-24">{{ isDrafting ? "close" : "reply"}}</i>
+          <i :class="['fas', isDrafting ? 'fa-times' : 'fa-reply', 'md-18']"></i>
         </el-button>
         <el-button
           v-if="depth > 0 && comment.comments"
@@ -98,7 +98,7 @@
           type="text"
           @click="onShowMorePressed"
         >
-          <i class="material-icons md-24">{{ showMore ? "unfold_less" : "unfold_more"}}</i>
+          <i :class="['fas', showMore ? 'fa-expand-alt' : 'fa-compress-alt', 'md-18']"></i>
         </el-button>
       </div>
 
