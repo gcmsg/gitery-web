@@ -47,7 +47,7 @@ export default class CommentCompose extends Vue {
   private draft = '';
 
   private onCancel() {
-    this.$emit('create');
+    this.$emit('cancel');
   }
 
   private onCreate() {

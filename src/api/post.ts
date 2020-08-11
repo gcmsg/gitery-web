@@ -24,3 +24,15 @@ export function updatePost(post: Post): AxiosPromise<ServerResponse<Post>> {
 export function deletePost(id: number): AxiosPromise<ServerResponse<Post>> {
   return request({ url: `/post/${id}`, method: 'delete' });
 }
+
+export function getUserLikes(): AxiosPromise<ServerResponse<number[]>> {
+  return request({ url: '/post/like', method: 'get' });
+}
+
+export function likePost(id: number): AxiosPromise<ServerResponse<undefined>> {
+  return request({ url: '/post/like', method: 'post', data: { postID: id } });
+}
+
+export function cancelLike(id: number): AxiosPromise<ServerResponse<undefined>> {
+  return request({ url: '/post/like', method: 'delete', data: { postID: id } });
+}
