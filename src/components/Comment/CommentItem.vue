@@ -75,15 +75,13 @@
           size="mini"
           type="text"
         >
-          <i class="far fa-thumbs-up md-18"></i>
-          <span>{{comment.voteUp}}</span>
+          <i class="far fa-thumbs-up md-18">{{comment.voteUp}}</i>
         </el-button>
         <el-button
           size="mini"
           type="text"
         >
-          <i class="far fa-thumbs-down md-18"></i>
-          <span>{{comment.voteDown}}</span>
+          <i class="far fa-thumbs-down md-18">{{comment.voteDown}}</i>
         </el-button>
         <el-button
           size="mini"

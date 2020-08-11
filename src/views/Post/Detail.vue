@@ -289,5 +289,9 @@ export default class extends Vue {
   private async onCommentDelete(comment: Comment) {
     await PostModule.deleteComment(comment);
   }
+
+  private async onCommentVote(comment: Comment, vote: boolean, voted: boolean) {
+    await PostModule.voteComment(comment, vote, voted);
+  }
 }
 </script>

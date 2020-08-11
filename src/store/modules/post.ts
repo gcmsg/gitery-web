@@ -85,6 +85,22 @@ class PostModule extends VuexModule implements PostState {
     comment.isDeleted = true;
   }
 
+  @Mutation
+  private VOTE_COMMENT(match: { comment: Comment; vote: boolean; voted?: boolean }) {
+    const { comment, vote, voted } = match;
+    if (vote) {
+      comment.voteUp += 1;
+      if (voted === false) {
+        comment.voteDown -= 1;
+      }
+    } else {
+      comment.voteDown += 1;
+      if (voted) {
+        comment.voteUp -= 1;
+      }
+    }
+  }
+
   @Action
   public async getLatestPosts() {
     this.SET_LOADING(true);
@@ -183,6 +199,15 @@ class PostModule extends VuexModule implements PostState {
     const { data } = await commentApi.deleteComment(comment.id);
     if (data.ok) {
       this.DELETE_COMMENT(comment);
+    }
+  }
+
+  @Action
+  public async voteComment(comment: Comment, vote: boolean, voted?: boolean) {
+    if (vote === voted) return;
+    const { data } = await commentApi.voteComment(comment.id, vote);
+    if (data.ok) {
+      this.VOTE_COMMENT({ comment, vote, voted });
     }
   }
 }
