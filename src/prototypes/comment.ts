@@ -15,3 +15,9 @@ export interface Comment {
   author?: User;
   comments?: Comment[];
 }
+
+export interface CommentVote {
+  commentID: number;
+  userID: number;
+  vote: boolean;
+}

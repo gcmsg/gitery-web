@@ -8,12 +8,14 @@ import { Post } from '@/prototypes/post';
 import { Comment } from '@/prototypes/comment';
 import * as postApi from '@/api/post';
 import * as commentApi from '@/api/comment';
+import UserModule from './user';
 
 export interface PostState {
   tags: string[];
   posts: Post[];
   isLoading: boolean;
   currentPost: Post;
+  userVotesOfCurrentComments: { [commentID: string]: boolean };
 }
 
 @Module({ dynamic: true, store, name: 'post' })
@@ -28,6 +30,8 @@ class PostModule extends VuexModule implements PostState {
     title: '',
     content: '',
   } as Post;
+
+  public userVotesOfCurrentComments = {};
 
   @Mutation
   private SET_LOADING(isLoading: boolean) {
@@ -83,6 +87,12 @@ class PostModule extends VuexModule implements PostState {
   private DELETE_COMMENT(comment: Comment) {
     // eslint-disable-next-line no-param-reassign
     comment.isDeleted = true;
+  }
+
+  @Mutation
+  private SET_USER_VOTES_FOR_CURRENT_COMMENTS(userVotes: { [commentID: string]: boolean }) {
+    console.log(userVotes);
+    this.userVotesOfCurrentComments = userVotes;
   }
 
   @Mutation
@@ -199,6 +209,20 @@ class PostModule extends VuexModule implements PostState {
     const { data } = await commentApi.deleteComment(comment.id);
     if (data.ok) {
       this.DELETE_COMMENT(comment);
+    }
+  }
+
+  @Action
+  public async getUserVotes(userID: number) {
+    if (!UserModule.isLoggedIn) return;
+    const { data } = await commentApi.getPostVotes(userID);
+    if (data.ok) {
+      const votes = data.data;
+      const voteMap = {} as { [commentID: string]: boolean };
+      for (let i = 0; i < votes.length; i += 1) {
+        voteMap[votes[i].commentID] = votes[i].vote;
+      }
+      this.SET_USER_VOTES_FOR_CURRENT_COMMENTS(voteMap);
     }
   }
 

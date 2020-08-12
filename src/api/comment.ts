@@ -1,7 +1,7 @@
 import { AxiosPromise } from 'axios';
 
 import request from '@/utils/request';
-import { Comment } from '@/prototypes/comment';
+import { Comment, CommentVote } from '@/prototypes/comment';
 import { ServerResponse } from '@/prototypes/response';
 
 export function createComment(comment: Comment): AxiosPromise<ServerResponse<Comment>> {
@@ -16,7 +16,7 @@ export function deleteComment(id: number): AxiosPromise<ServerResponse<Comment>>
   return request({ url: `/comment/${id}`, method: 'delete' });
 }
 
-export function getPostVotes(postID: number): AxiosPromise<ServerResponse<number[]>> {
+export function getPostVotes(postID: number): AxiosPromise<ServerResponse<CommentVote[]>> {
   // eslint-disable-next-line @typescript-eslint/camelcase
   return request({ url: '/comment/vote', method: 'get', params: { post_id: postID } });
 }

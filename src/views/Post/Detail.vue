@@ -241,7 +241,11 @@ export default class extends Vue {
   private async created() {
     const postID = Number.parseInt(this.$route.params.id, 10);
     if (!Number.isNaN(postID)) {
-      await PostModule.getPostDetail(postID);
+      await Promise.all([
+        PostModule.getPostDetail(postID),
+        PostModule.getUserVotes(postID),
+      ]);
+
       this.draftPost.id = postID;
       this.draftPost.title = this.post.title;
       this.draftPost.content = this.post.content;
