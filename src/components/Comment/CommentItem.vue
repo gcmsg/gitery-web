@@ -75,13 +75,13 @@
           size="mini"
           type="text"
         >
-          <i class="far fa-thumbs-up md-18">{{comment.voteUp}}</i>
+          <i :class="[isVoteUp ? 'fas' : 'far', 'fa-thumbs-up', 'md-18']">{{comment.voteUp}}</i>
         </el-button>
         <el-button
           size="mini"
           type="text"
         >
-          <i class="far fa-thumbs-down md-18">{{comment.voteDown}}</i>
+          <i :class="[isVoteDown ? 'fas' : 'far', 'fa-thumbs-down', 'md-18']">{{comment.voteDown}}</i>
         </el-button>
         <el-button
           size="mini"
@@ -170,6 +170,8 @@ export default class CommentItem extends Vue {
 
   @Prop({ default: 0 }) depth!: number;
 
+  @Prop({ default() { return {}; } }) votes!: { [commentID: number]: boolean };
+
   private editable = false;
 
   private content = '';
@@ -180,6 +182,14 @@ export default class CommentItem extends Vue {
 
   private get isAuthor() {
     return this.userID === this.comment.author?.id;
+  }
+
+  private get isVoteUp() {
+    return this.votes[this.comment.id] === true;
+  }
+
+  private get isVoteDown() {
+    return this.votes[this.comment.id] === false;
   }
 
   private created() {

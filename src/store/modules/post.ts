@@ -15,7 +15,7 @@ export interface PostState {
   posts: Post[];
   isLoading: boolean;
   currentPost: Post;
-  userVotesOfCurrentComments: { [commentID: string]: boolean };
+  currentVotesByUser: { [commentID: number]: boolean };
 }
 
 @Module({ dynamic: true, store, name: 'post' })
@@ -31,7 +31,7 @@ class PostModule extends VuexModule implements PostState {
     content: '',
   } as Post;
 
-  public userVotesOfCurrentComments = {};
+  public currentVotesByUser = {};
 
   @Mutation
   private SET_LOADING(isLoading: boolean) {
@@ -90,9 +90,8 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Mutation
-  private SET_USER_VOTES_FOR_CURRENT_COMMENTS(userVotes: { [commentID: string]: boolean }) {
-    console.log(userVotes);
-    this.userVotesOfCurrentComments = userVotes;
+  private SET_CURRENT_VOTES_BY_USER(userVotes: { [commentID: number]: boolean }) {
+    this.currentVotesByUser = userVotes;
   }
 
   @Mutation
@@ -218,11 +217,11 @@ class PostModule extends VuexModule implements PostState {
     const { data } = await commentApi.getPostVotes(userID);
     if (data.ok) {
       const votes = data.data;
-      const voteMap = {} as { [commentID: string]: boolean };
+      const voteMap = {} as { [commentID: number]: boolean };
       for (let i = 0; i < votes.length; i += 1) {
         voteMap[votes[i].commentID] = votes[i].vote;
       }
-      this.SET_USER_VOTES_FOR_CURRENT_COMMENTS(voteMap);
+      this.SET_CURRENT_VOTES_BY_USER(voteMap);
     }
   }
 

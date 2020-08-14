@@ -88,6 +88,7 @@
               :key="comment.id"
               :comment="comment"
               :userID="userID"
+              :votes="votes"
               @create="onCommentCreate"
               @update="onCommentUpdate"
               @delete="onCommentDelete"
@@ -208,10 +209,6 @@ export default class extends Vue {
     return PostModule.currentPost;
   }
 
-  private onPostContentChanged(content: string) {
-    this.draftPost.content = content;
-  }
-
   private get isContentLoading() {
     return !PostModule.currentPost.content;
   }
@@ -238,6 +235,10 @@ export default class extends Vue {
     return UserModule.isLoggedIn && PostModule.currentPost.userID === UserModule.user.id;
   }
 
+  private get votes() {
+    return PostModule.currentVotesByUser;
+  }
+
   private async created() {
     const postID = Number.parseInt(this.$route.params.id, 10);
     if (!Number.isNaN(postID)) {
@@ -250,6 +251,10 @@ export default class extends Vue {
       this.draftPost.title = this.post.title;
       this.draftPost.content = this.post.content;
     }
+  }
+
+  private onPostContentChanged(content: string) {
+    this.draftPost.content = content;
   }
 
   private async onEditButtonPressed() {
