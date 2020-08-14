@@ -92,6 +92,7 @@
               @create="onCommentCreate"
               @update="onCommentUpdate"
               @delete="onCommentDelete"
+              @vote="onCommentVote"
             />
           </div>
         </div>
@@ -300,7 +301,7 @@ export default class extends Vue {
   }
 
   private async onCommentVote(comment: Comment, vote: boolean, voted: boolean) {
-    await PostModule.voteComment(comment, vote, voted);
+    await PostModule.voteComment({ comment, vote, voted });
   }
 }
 </script>

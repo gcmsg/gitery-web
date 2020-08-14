@@ -74,14 +74,16 @@
         <el-button
           size="mini"
           type="text"
+          @click="onVoteUpPressed"
         >
-          <i :class="[isVoteUp ? 'fas' : 'far', 'fa-thumbs-up', 'md-18']">{{comment.voteUp}}</i>
+          <i :class="[isVotedUp ? 'fas' : 'far', 'fa-thumbs-up', 'md-18']">{{comment.voteUp}}</i>
         </el-button>
         <el-button
           size="mini"
           type="text"
+          @click="onVoteDownPressed"
         >
-          <i :class="[isVoteDown ? 'fas' : 'far', 'fa-thumbs-down', 'md-18']">{{comment.voteDown}}</i>
+          <i :class="[isVotedDown ? 'fas' : 'far', 'fa-thumbs-down', 'md-18']">{{comment.voteDown}}</i>
         </el-button>
         <el-button
           size="mini"
@@ -118,10 +120,12 @@
           :comment="childComment"
           :replyTo="comment.author.nickname"
           :userID="userID"
+          :votes="votes"
           :depth="depth+1"
           @create="onCommentCreate"
           @update="onCommentUpdate"
           @delete="onCommentDelete"
+          @vote="onCommentVote"
         />
       </div>
     </el-card>
@@ -184,11 +188,11 @@ export default class CommentItem extends Vue {
     return this.userID === this.comment.author?.id;
   }
 
-  private get isVoteUp() {
+  private get isVotedUp() {
     return this.votes[this.comment.id] === true;
   }
 
-  private get isVoteDown() {
+  private get isVotedDown() {
     return this.votes[this.comment.id] === false;
   }
 
@@ -244,6 +248,19 @@ export default class CommentItem extends Vue {
 
   private onCommentDelete(comment: Comment) {
     this.$emit('delete', comment);
+  }
+
+  // vote comment
+  private onVoteUpPressed() {
+    this.onCommentVote(this.comment, true, this.votes[this.comment.id]);
+  }
+
+  private onVoteDownPressed() {
+    this.onCommentVote(this.comment, false, this.votes[this.comment.id]);
+  }
+
+  private onCommentVote(comment: Comment, vote: boolean, voted: boolean) {
+    this.$emit('vote', comment, vote, voted);
   }
 }
 </script>

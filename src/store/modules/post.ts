@@ -31,7 +31,7 @@ class PostModule extends VuexModule implements PostState {
     content: '',
   } as Post;
 
-  public currentVotesByUser = {};
+  public currentVotesByUser = {} as { [commentID: number]: boolean };
 
   @Mutation
   private SET_LOADING(isLoading: boolean) {
@@ -97,15 +97,30 @@ class PostModule extends VuexModule implements PostState {
   @Mutation
   private VOTE_COMMENT(match: { comment: Comment; vote: boolean; voted?: boolean }) {
     const { comment, vote, voted } = match;
-    if (vote) {
-      comment.voteUp += 1;
-      if (voted === false) {
-        comment.voteDown -= 1;
+
+    if (voted === undefined) {
+      if (vote) {
+        comment.voteUp += 1;
+        this.currentVotesByUser = { ...this.currentVotesByUser, [comment.id]: true };
+      } else {
+        comment.voteDown += 1;
+        this.currentVotesByUser = { ...this.currentVotesByUser, [comment.id]: false };
+      }
+    } else if (voted) {
+      comment.voteUp -= 1;
+      delete this.currentVotesByUser[comment.id];
+      this.currentVotesByUser = { ...this.currentVotesByUser };
+      if (!vote) {
+        comment.voteDown += 1;
+        this.currentVotesByUser = { ...this.currentVotesByUser, [comment.id]: false };
       }
     } else {
-      comment.voteDown += 1;
-      if (voted) {
-        comment.voteUp -= 1;
+      comment.voteDown -= 1;
+      delete this.currentVotesByUser[comment.id];
+      this.currentVotesByUser = { ...this.currentVotesByUser };
+      if (vote) {
+        comment.voteUp += 1;
+        this.currentVotesByUser = { ...this.currentVotesByUser, [comment.id]: true };
       }
     }
   }
@@ -226,11 +241,16 @@ class PostModule extends VuexModule implements PostState {
   }
 
   @Action
-  public async voteComment(comment: Comment, vote: boolean, voted?: boolean) {
-    if (vote === voted) return;
-    const { data } = await commentApi.voteComment(comment.id, vote);
+  public async voteComment(args: { comment: Comment; vote: boolean; voted?: boolean }) {
+    let res;
+    if (args.vote === args.voted) {
+      res = await commentApi.cancelVote(args.comment.id);
+    } else {
+      res = await commentApi.voteComment(args.comment.id, args.vote);
+    }
+    const { data } = res;
     if (data.ok) {
-      this.VOTE_COMMENT({ comment, vote, voted });
+      this.VOTE_COMMENT({ comment: args.comment, vote: args.vote, voted: args.voted });
     }
   }
 }
